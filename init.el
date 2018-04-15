@@ -300,7 +300,21 @@
   :after (js2-mode)
   :hook (js2-mode . prettier-js-mode))
 
-(use-package prodigy)
+(use-package prodigy
+  :config
+  (prodigy-define-tag
+    :name 'rails-thin-server
+    :command "rails"
+    :args '("server" "thin")
+    :ready-message "Listening on .*, CTRL\\+C to stop")
+
+  (prodigy-define-tag
+    :name 'spring-boot-server
+    :command "mvn"
+    :args '("spring-boot:run")
+    :ready-message ".* Started .* in .* seconds (JVM running for .*)")
+
+  (load-file "~/.emacs.d/services.el"))
 
 (use-package prog-mode
   :after (company)
