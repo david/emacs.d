@@ -25,12 +25,6 @@
   :config
   (load-theme 'atom-one-dark t))
 
-(setq site-frame-settings '((menu-bar-lines . 0)
-			    (tool-bar-lines . 0)
-			    (vertical-scroll-bars . nil)
-			    (alpha . (95 . 95))
-			    (fullscreen . maximized)))
-
 (use-package site-editor
   :no-require t
   :ensure nil
@@ -40,6 +34,12 @@
   (setq require-final-newline t)
   (setq make-backup-files nil)
   (setq scroll-conservatively 1000)
+
+  (setq site-frame-settings '((menu-bar-lines . 0)
+                              (tool-bar-lines . 0)
+                              (vertical-scroll-bars . nil)
+                              (alpha . (95 . 95))
+                              (fullscreen . maximized)))
   (setq default-frame-alist site-frame-settings)
   (setq initial-frame-alist site-frame-settings)
 
