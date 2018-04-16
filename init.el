@@ -47,7 +47,7 @@
   (setq-default fill-column 80)
   (setq-default line-spacing 2)
 
-  (fringe-mode '(2 . 4))
+  (fringe-mode '(4 . 4))
   (global-hl-line-mode 1)
   (blink-cursor-mode -1)
   (show-paren-mode 1)
