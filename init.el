@@ -316,9 +316,7 @@
     :name 'spring-boot-server
     :command "mvn"
     :args '("spring-boot:run")
-    :ready-message ".* Started .* in .* seconds (JVM running for .*)")
-
-  (load-file "~/.emacs.d/services.el"))
+    :ready-message ".* Started .* in .* seconds (JVM running for .*)"))
 
 (use-package prog-mode
   :after (company)
@@ -380,6 +378,12 @@
 (use-package yasnippet
   :config
   (yas-global-mode 1))
+
+(use-package projects
+  :no-require t
+  :ensure nil
+  :config
+  (load-file "~/.emacs.d/projects.el"))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
