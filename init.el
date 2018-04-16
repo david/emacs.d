@@ -101,6 +101,14 @@
   :config
   (dimmer-mode 1))
 
+(use-package emacs-lisp
+  :no-require t
+  :ensure nil
+  :hook ((emacs-lisp-mode . smartparens-mode)
+         (emacs-lisp-mode . fci-mode)
+         (emacs-lisp-mode . turn-on-eldoc-mode)
+         (emacs-lisp-mode . company-mode)))
+
 (use-package emmet-mode)
 
 (use-package enh-ruby-mode
