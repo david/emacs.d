@@ -247,6 +247,7 @@
    "eq" '(save-buffers-kill-terminal :which-key "quit emacs")
 
    "f"  '(:ignore t :which-key "files")
+   "fd" '(delete-current-file :which-key "delete current file")
    "ff" '(counsel-find-file :which-key "find file")
    "fv" '(find-alternate-file :which-key "find alternate file")
 
@@ -399,3 +400,16 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(defun delete-current-file ()
+  "Removes file connected to current buffer and kills buffer."
+  (interactive)
+  (let ((filename (buffer-file-name))
+        (buffer (current-buffer))
+        (name (buffer-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (error "Buffer '%s' is not visiting a file!" name)
+      (when (yes-or-no-p "Are you sure you want to remove this file? ")
+        (delete-file filename)
+        (kill-buffer buffer)
+        (message "File '%s' removed" filename)))))
