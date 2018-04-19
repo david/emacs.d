@@ -100,6 +100,11 @@
 (use-package counsel
   :after (ivy)
   :config
+  (general-define-key
+   :states 'insert
+   :keymaps 'counsel-find-file-map
+   "C-w" 'counsel-up-directory)
+
   (counsel-mode 1))
 
 (use-package counsel-projectile
