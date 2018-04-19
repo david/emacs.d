@@ -52,6 +52,14 @@
   (blink-cursor-mode -1)
   (show-paren-mode 1)
 
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-language-environment 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (setq locale-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+  (set-input-method nil)
+
   (set-face-attribute
    'default nil :font "Fira Code" :foreground "#aaaaaa" :height 120)
 
