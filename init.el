@@ -251,6 +251,11 @@
    "c"  '(:ignore t :which-key "code")
    "ce" '(eval-last-sexp :which-key "eval last code block")
    "cm" '(comment-dwim :which-key "comment dwim")
+
+   "cS" '(:ignore t :which-key "snippets")
+   "cSn" '(yas/new-snippet :which-key "new snippet")
+   "cSS" '(yas/visit-snippet-file :which-key "find snippet file")
+
    "ct" '(projectile-toggle-between-implementation-and-test
           :which-key "toggle test file")
    "cv" '(minitest-verify :which-key "run tests in file")
