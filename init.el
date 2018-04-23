@@ -278,13 +278,13 @@
    "hv" '(counsel-describe-variable :which-key "describe variable")
 
    "p"  '(:ignore t :which-key "projects")
-   "ps" '(counsel-projectile-ag :which-key "search in project")
    "pb" '(counsel-projectile :which-key "switch to buffer of file")
    "pc" '(projectile-rails-console :which-key "run console")
    "pf" '(counsel-projectile-find-file :which-key "find file in project")
    "ph" '(projectile-run-eshell
           :which-key "shell in project root")
    "pp" '(counsel-projectile-switch-project :which-key "switch project")
+   "ps" '(counsel-projectile-ag :which-key "search in project")
    "pv" '(magit-status :which-key "git status")
 
    "w"  '(:ignore t :which-key "windows")
