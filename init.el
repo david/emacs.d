@@ -261,6 +261,7 @@
    "f"  '(:ignore t :which-key "files")
    "fd" '(delete-current-file :which-key "delete current file")
    "ff" '(counsel-find-file :which-key "find file")
+   "fi" '(insert-file :which-key "insert file contents")
    "fv" '(find-alternate-file :which-key "find alternate file")
 
    "h"  '(:ignore t :which-key "help")
