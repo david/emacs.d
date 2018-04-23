@@ -399,6 +399,11 @@
 
   (projectile-mode 1))
 
+(use-package projectile-rails
+  :after projectile
+  :config
+  (projectile-rails-global-mode 1))
+
 (use-package pug-mode
   :config
   (setq pug-tab-width 2))
@@ -457,7 +462,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (meghanada evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js flow-minor-mode flycheck-flow xterm-color general yasnippet js2-mode enh-ruby-mode smartparens fill-column-indicator magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
+    (projectile-rails meghanada evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js flow-minor-mode flycheck-flow xterm-color general yasnippet js2-mode enh-ruby-mode smartparens fill-column-indicator magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
