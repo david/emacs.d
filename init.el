@@ -227,7 +227,6 @@
   (flycheck-add-next-checker 'javascript-eslint 'javascript-flow))
 
 (use-package general
-  :after (which-key)
   :config
 
   (general-define-key
