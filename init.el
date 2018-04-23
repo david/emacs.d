@@ -228,6 +228,8 @@
 
 (use-package general
   :config
+  (general-create-definer ior3k-local-leader-def
+    :prefix "C-; m")
 
   (general-define-key
    "C-w" 'backward-kill-word
@@ -300,6 +302,46 @@
 
   (ivy-mode 1))
 
+(use-package java-mode
+  :no-require t
+  :ensure nil
+  :after general
+  :hook ((java-mode . flycheck-mode)
+         (java-mode . smartparens-mode)
+         (java-mode . fci-mode)
+         (java-mode . subword-mode)
+         (java-mode . company-mode)
+         (java-mode . turn-on-eldoc-mode))
+  :init
+  (ior3k-local-leader-def
+   :states 'normal
+   :keymaps 'java-mode-map
+
+   "i" '(meghanada-import-all :which-key "optimize imports"))
+
+  (defun ior3k-insert-semicolon-at-eol ()
+    (interactive)
+    (end-of-line)
+    (self-insert-command 1))
+
+  (general-define-key
+   :states 'insert
+   :keymaps 'java-mode-map
+   ";" 'ior3k-insert-semicolon-at-eol)
+
+  (defun ior3k-java-settings ()
+    (setq c-basic-offset 2
+          fill-column 100
+          tab-width 2)
+
+    (c-set-offset 'statement-cont '++)
+    (c-set-offset 'arglist-intro '+)
+    (c-set-offset 'arglist-close 0)
+
+    (add-hook 'before-save-hook 'meghanada-code-beautify))
+
+  (add-hook 'java-mode-hook 'ior3k-java-settings))
+
 (use-package js2-mode
   :mode "\\.js\\'"
   :commands js2-mode
@@ -319,6 +361,9 @@
   (setq magit-rebase-arguments '("--autostash"))
   (setq magit-branch-arguments nil)
   (add-to-list 'same-window-regexps "^magit"))
+
+(use-package meghanada
+  :hook (java-mode . meghanada-mode))
 
 (use-package prettier-js
   :after (js2-mode)
@@ -412,7 +457,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js flow-minor-mode flycheck-flow xterm-color general yasnippet js2-mode enh-ruby-mode smartparens fill-column-indicator magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
+    (meghanada evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js flow-minor-mode flycheck-flow xterm-color general yasnippet js2-mode enh-ruby-mode smartparens fill-column-indicator magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
