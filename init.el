@@ -283,6 +283,7 @@
    "w"  '(:ignore t :which-key "windows")
    "wb" '(split-window-below :which-key "open new window below")
    "wd" '(delete-window :which-key "delete window")
+   "wk" '(delete-other-windows :which-key "keep this window only")
    "wr" '(split-window-right :which-key "open new window to the right")))
 
 (use-package ivy
