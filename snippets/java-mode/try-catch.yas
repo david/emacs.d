@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: try/catch
+# key: tc
+# --
+try {
+  `yas-selected-text`
+} catch (${1:Exception} e) {
+  $0
+}

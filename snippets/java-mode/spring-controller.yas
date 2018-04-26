@@ -1,0 +1,15 @@
+# key: springc
+# name: spring controller
+# --
+package ${1:`(mapconcat
+              'identity
+              (cdr (member "java" (split-string default-directory "/" t)))
+              ".")`};
+
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class ${2:`(file-name-sans-extension
+                   (file-name-nondirectory (buffer-file-name)))`} {
+  $0
+}

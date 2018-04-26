@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: local variable with value
+# key: lvs
+# --
+${1:Type} ${2:name} = $0;

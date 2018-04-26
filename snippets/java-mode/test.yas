@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: test
+# key: test
+# --
+@Test
+public class ${1:name}() {
+  $0
+}
