@@ -118,7 +118,6 @@
   :no-require t
   :ensure nil
   :hook ((emacs-lisp-mode . smartparens-mode)
-         (emacs-lisp-mode . fci-mode)
          (emacs-lisp-mode . turn-on-eldoc-mode)
          (emacs-lisp-mode . company-mode)))
 
@@ -209,11 +208,6 @@
 (use-package evil-surround
   :config
   (global-evil-surround-mode 1))
-
-(use-package fill-column-indicator
-  :config
-  (setq fci-rule-width 1)
-  (setq fci-rule-color "#303030"))
 
 (use-package flycheck-flow)
 
@@ -310,7 +304,6 @@
   :after general
   :hook ((java-mode . flycheck-mode)
          (java-mode . smartparens-mode)
-         (java-mode . fci-mode)
          (java-mode . subword-mode)
          (java-mode . company-mode)
          (java-mode . turn-on-eldoc-mode))
@@ -391,7 +384,6 @@
   :no-require t
   :hook
   ((prog-mode . smartparens-mode)
-   (prog-mode . fci-mode)
    (prog-mode . subword-mode)
    (prog-mode . company-mode)))
 
@@ -464,7 +456,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (projectile-rails meghanada evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js flow-minor-mode flycheck-flow xterm-color general yasnippet js2-mode enh-ruby-mode smartparens fill-column-indicator magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
+    (projectile-rails meghanada evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js flow-minor-mode flycheck-flow xterm-color general yasnippet js2-mode enh-ruby-mode smartparens magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
