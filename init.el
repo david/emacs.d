@@ -251,6 +251,7 @@
    "cS" '(:ignore t :which-key "snippets")
    "cSn" '(yas/new-snippet :which-key "new snippet")
    "cSS" '(yas/visit-snippet-file :which-key "find snippet file")
+   "cSi" '(yas/insert-snippet :which-key "insert snippet")
 
    "ct" '(projectile-toggle-between-implementation-and-test
           :which-key "toggle test file")
