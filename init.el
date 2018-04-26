@@ -267,6 +267,7 @@
 
    "f"  '(:ignore t :which-key "files")
    "fd" '(delete-current-file :which-key "delete current file")
+   "fe" '(dired :which-key "dired")
    "ff" '(counsel-find-file :which-key "find file")
    "fi" '(insert-file :which-key "insert file contents")
    "fv" '(find-alternate-file :which-key "find alternate file")
@@ -280,6 +281,7 @@
    "p"  '(:ignore t :which-key "projects")
    "pb" '(counsel-projectile :which-key "switch to buffer of file")
    "pc" '(projectile-rails-console :which-key "run console")
+   "pe" '(projectile-dired :which-key "dired in project root")
    "pf" '(counsel-projectile-find-file :which-key "find file in project")
    "ph" '(projectile-run-eshell
           :which-key "shell in project root")
