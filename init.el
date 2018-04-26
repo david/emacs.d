@@ -103,7 +103,7 @@
   (general-define-key
    :states 'insert
    :keymaps 'counsel-find-file-map
-   "C-w" 'counsel-up-directory)
+   "C-l" 'counsel-up-directory)
 
   (counsel-mode 1))
 
