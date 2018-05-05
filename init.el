@@ -332,9 +332,7 @@
 
     (c-set-offset 'statement-cont '++)
     (c-set-offset 'arglist-intro '+)
-    (c-set-offset 'arglist-close 0)
-
-    (add-hook 'before-save-hook 'meghanada-code-beautify))
+    (c-set-offset 'arglist-close 0))
 
   (add-hook 'java-mode-hook 'ior3k-java-settings))
 
