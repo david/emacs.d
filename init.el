@@ -326,9 +326,10 @@
    ";" 'ior3k-insert-semicolon-at-eol)
 
   (defun ior3k-java-settings ()
-    (setq c-basic-offset 2
+    (setq c-basic-offset 4
           fill-column 100
-          tab-width 2)
+          tab-width 4
+          evil-shift-width 4)
 
     (c-set-offset 'statement-cont '++)
     (c-set-offset 'arglist-intro '+)
