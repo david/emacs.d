@@ -246,6 +246,7 @@
 
    "c"  '(:ignore t :which-key "code")
    "ce" '(eval-last-sexp :which-key "eval last code block")
+   "ci" '(counsel-imenu :which-key "imenu")
    "cm" '(comment-dwim :which-key "comment dwim")
 
    "cS" '(:ignore t :which-key "snippets")
