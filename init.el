@@ -205,6 +205,10 @@
   :config
   (evil-collection-init))
 
+(use-package evil-exchange
+  :config
+  (evil-exchange-install))
+
 (use-package evil-magit
   :after (magit))
 
@@ -476,7 +480,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (lsp-java company-lsp lsp-ui wgrep projectile-rails evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js flow-minor-mode flycheck-flow xterm-color general yasnippet js2-mode enh-ruby-mode smartparens magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
+    (evil-exchange lsp-java company-lsp lsp-ui wgrep projectile-rails evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js flow-minor-mode flycheck-flow xterm-color general yasnippet js2-mode enh-ruby-mode smartparens magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
