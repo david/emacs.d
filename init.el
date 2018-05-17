@@ -38,7 +38,6 @@
   (setq site-frame-settings '((menu-bar-lines . 0)
                               (tool-bar-lines . 0)
                               (vertical-scroll-bars . nil)
-                              (alpha . (95 . 95))
                               (fullscreen . maximized)))
   (setq default-frame-alist site-frame-settings)
   (setq initial-frame-alist site-frame-settings)
