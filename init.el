@@ -277,6 +277,7 @@
 
    "e"  '(:ignore t :which-key "emacs")
    "em" '(evil-record-macro :which-key "record macro")
+   "ep" '(package-list-packages :which-key "list packages")
    "eq" '(save-buffers-kill-terminal :which-key "quit emacs")
 
    "f"  '(:ignore t :which-key "files")
