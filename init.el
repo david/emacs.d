@@ -134,7 +134,7 @@
   :config
   (setq eshell-hist-ignoredups t)
   (setq eshell-history-size 65456)
-  (setq eshell-prompt-regexp "^[0-9]\\{2\\}\\(:[0-9]\\{2\\}\\)\\{2\\} • .* • ")
+  (setq eshell-prompt-regexp "^[0-9:]+ • .* • ")
   (setq eshell-highlight-prompt nil)
   (setq ior3k-projects-dir (concat (getenv "HOME") "/projects/"))
 
