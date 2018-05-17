@@ -234,6 +234,11 @@
    "s-h" 'windmove-left)
 
   (general-define-key
+   :states 'normal
+
+   "q" 'quit-window)
+
+  (general-define-key
    :prefix "C-;"
 
    "C-;" 'counsel-M-x
@@ -259,6 +264,7 @@
    "cv" '(minitest-verify :which-key "run tests in file")
 
    "e"  '(:ignore t :which-key "emacs")
+   "em" '(evil-record-macro :which-key "record macro")
    "eq" '(save-buffers-kill-terminal :which-key "quit emacs")
 
    "f"  '(:ignore t :which-key "files")
