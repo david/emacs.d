@@ -96,6 +96,14 @@
 (use-package company
   :commands company-mode)
 
+(use-package company-lsp
+  :after company
+  :config
+  (setq company-lsp-enable-snippet nil
+        company-lsp-cache-candidates nil)
+  (push 'company-lsp company-backends)
+  (push 'java-mode company-global-modes))
+
 (use-package counsel
   :after (ivy)
   :config
@@ -320,7 +328,7 @@
    :states 'normal
    :keymaps 'java-mode-map
 
-   "i" '(meghanada-import-all :which-key "optimize imports"))
+   "a" '(lsp-execute-code-action :which-key "code actions"))
 
   (defun ior3k-insert-semicolon-at-eol ()
     (interactive)
@@ -356,6 +364,12 @@
   (setq js2-mode-show-strict-warnings nil)
   (setq js2-bounce-indent-p t))
 
+(use-package lsp-java
+  :hook (java-mode . lsp-java-enable))
+
+(use-package lsp-ui
+  :hook (lsp-after-open . lsp-ui-mode))
+
 (use-package magit
   :commands (magit-status)
   :config
@@ -363,9 +377,6 @@
   (setq magit-rebase-arguments '("--autostash"))
   (setq magit-branch-arguments nil)
   (add-to-list 'same-window-regexps "^magit"))
-
-(use-package meghanada
-  :hook (java-mode . meghanada-mode))
 
 (use-package prettier-js
   :after (js2-mode)
@@ -465,7 +476,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (wgrep projectile-rails meghanada evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js flow-minor-mode flycheck-flow xterm-color general yasnippet js2-mode enh-ruby-mode smartparens magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
+    (lsp-java company-lsp lsp-ui wgrep projectile-rails evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js flow-minor-mode flycheck-flow xterm-color general yasnippet js2-mode enh-ruby-mode smartparens magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
