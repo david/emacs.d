@@ -94,7 +94,9 @@
   (avy-setup-default))
 
 (use-package company
-  :commands company-mode)
+  :commands company-mode
+  :config
+  (company-tng-configure-default))
 
 (use-package company-lsp
   :after company
