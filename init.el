@@ -328,8 +328,7 @@
   :hook ((java-mode . flycheck-mode)
          (java-mode . smartparens-mode)
          (java-mode . subword-mode)
-         (java-mode . company-mode)
-         (java-mode . turn-on-eldoc-mode))
+         (java-mode . company-mode))
   :init
   (ior3k-local-leader-def
    :states 'normal
