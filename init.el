@@ -111,6 +111,7 @@
 
 (use-package dimmer
   :config
+  (setq dimmer-fraction 0.5)
   (dimmer-mode 1))
 
 (use-package emacs-lisp
