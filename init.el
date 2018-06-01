@@ -250,6 +250,7 @@
   (general-define-key
    :states 'normal
 
+   "+" 'universal-argument
    "q" 'quit-window)
 
   (general-define-key
