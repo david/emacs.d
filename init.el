@@ -137,6 +137,7 @@
   :after (smartparens)
   :mode "\\.rb\\'"
   :config
+  (setq enh-ruby-add-encoding-comment-on-save nil)
   (setq enh-ruby-deep-indent-paren nil)
   (setq enh-ruby-deep-indent-construct nil))
 
