@@ -284,6 +284,7 @@
    "em" '(evil-record-macro :which-key "record macro")
    "ep" '(package-list-packages :which-key "list packages")
    "eq" '(save-buffers-kill-terminal :which-key "quit emacs")
+   "es" '(prodigy :which-key "servers")
 
    "f"  '(:ignore t :which-key "files")
    "fd" '(delete-current-file :which-key "delete current file")
