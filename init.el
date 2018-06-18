@@ -380,7 +380,11 @@
   (setq lsp-inhibit-message t))
 
 (use-package lsp-java
-  :hook (java-mode . lsp-java-enable))
+  :hook (java-mode . lsp-java-enable)
+  :config
+  (setq lsp-java-enable-file-watch nil)
+  (setq lsp-java-organize-imports nil)
+  (setq lsp-java-save-action-organize-imports nil))
 
 (use-package lsp-ui
   :hook (lsp-after-open . lsp-ui-mode))
