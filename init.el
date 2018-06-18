@@ -441,7 +441,9 @@
   :config
   (setq pug-tab-width 2))
 
-(use-package rjsx-mode)
+(use-package rjsx-mode
+  :after js2-mode
+  :mode "\\.js\\'")
 
 (use-package smartparens
   :init (require 'smartparens-config)
