@@ -409,7 +409,13 @@
     :name 'spring-boot-server
     :command "mvn"
     :args '("spring-boot:run")
-    :ready-message ".* Started .* in .* seconds (JVM running for .*)"))
+    :ready-message ".* Started .* in .* seconds (JVM running for .*)")
+
+  (prodigy-define-tag
+    :name 'yarn-server
+    :command "yarn"
+    :args '("start")
+    :ready-message "You can now view .* in the browser."))
 
 (use-package prog-mode
   :after (company)
