@@ -375,6 +375,10 @@
   (setq js2-mode-show-strict-warnings nil)
   (setq js2-bounce-indent-p t))
 
+(use-package lsp-mode
+  :config
+  (setq lsp-inhibit-message t))
+
 (use-package lsp-java
   :hook (java-mode . lsp-java-enable))
 
