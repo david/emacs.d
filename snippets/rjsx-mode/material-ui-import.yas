@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: import material ui
+# key: imu
+# --
+import ${1:Type} from "@material-ui/core/$1";

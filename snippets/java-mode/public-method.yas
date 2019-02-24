@@ -1,0 +1,6 @@
+# key: um
+# name: public method
+# --
+public ${1:Type} ${2:name}(${3:args}) {
+  $0
+}

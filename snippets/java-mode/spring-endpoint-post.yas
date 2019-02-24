@@ -1,0 +1,15 @@
+# key: springepp
+# name: spring endpoint (POST)
+# --
+@ApiOperation(value = "$1")
+@ApiResponses(
+  value = {
+    @ApiResponse(code = 200, message = "OK"),
+    @ApiResponse(code = ${2:400}, message = "${3:Bad Request}")
+  }
+)
+@PostMapping(value = "/${4:endpoint}")
+@ResponseStatus(HttpStatus.OK)
+public ${5:Type} ${6:name}(@RequestBody ${7:BodyType} request) {
+  $0
+}

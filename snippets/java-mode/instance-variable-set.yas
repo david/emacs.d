@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: instance variable set
+# key: ivs
+# --
+this.${1:name} = $1;

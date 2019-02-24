@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: public static method
+# key: usm
+# --
+public static ${Type} ${name}(${args}) {
+  $0
+}

@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: react component file
+# key: rcf
+# --
+import React from "react";
+
+const ${1:Name} = (${{ ${args} }}) => (
+  $0
+);
+
+export default $1;

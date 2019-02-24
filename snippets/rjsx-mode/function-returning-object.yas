@@ -1,0 +1,4 @@
+# key: fo
+# name: function returning object
+# --
+${export }const ${name} = (${args}) => ({$0});

@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: fetch
+# key: fetch
+# --
+lifecycle({
+  componentDidMount() {
+    $0
+  }
+}),

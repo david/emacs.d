@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: hypersc
+# key: hypersc
+# --
+import h from "react-hyperscript";
+
+const ${1:Component} = (${2:{ ${3:args} }}) => h($0);
+
+export default $1;

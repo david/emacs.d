@@ -1,4 +1,5 @@
-# key: lvc
+# -*- mode: snippet -*-
 # name: local variable with constructor
+# key: lvc
 # --
-${1:Type} ${2:name} = new $1($3);$0
+${1:Type} ${name} = new $1(${args});

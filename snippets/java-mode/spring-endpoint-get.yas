@@ -1,0 +1,15 @@
+# key: springepg
+# name: spring endpoint (GET)
+# --
+@ApiOperation(value = "$1")
+@ApiResponses(
+  value = {
+    @ApiResponse(code = 200, message = "OK"),
+    @ApiResponse(code = ${2:400}, message = "${3:Bad Request}")
+  }
+)
+@GetMapping(value = "/${4:endpoint}")
+@ResponseStatus(HttpStatus.OK)
+public ${5:Type} ${6:name}($7) {
+  $0
+}

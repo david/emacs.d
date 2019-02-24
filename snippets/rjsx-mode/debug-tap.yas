@@ -1,0 +1,4 @@
+# key: dbgtap
+# name: debug tap
+# --
+(${1:x}) => { console.log("$1 ${2:extra}=>", $1); return $1; }$0

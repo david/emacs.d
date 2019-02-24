@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: react component
+# key: reactc
+# --
+import React from "react";
+
+const ${1:Component} = (${2:{ $3 }}) => (
+  $0
+);

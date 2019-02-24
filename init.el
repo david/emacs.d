@@ -15,6 +15,12 @@
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-env "CDPATH"))
 
+(use-package dabbrev
+  :no-require t
+  :ensure nil
+  :config
+  (setq dabbrev-upcase-means-case-search nil))
+
 (use-package site-environment
   :no-require t
   :ensure nil
@@ -38,8 +44,7 @@
   (setq site-frame-settings '((menu-bar-lines . 0)
                               (tool-bar-lines . 0)
                               (vertical-scroll-bars . nil)
-                              (fullscreen . maximized)
-                              (alpha . 95)))
+                              (fullscreen . maximized)))
   (setq default-frame-alist site-frame-settings)
   (setq initial-frame-alist site-frame-settings)
 
@@ -61,7 +66,7 @@
   (set-input-method nil)
 
   (set-face-attribute
-   'default nil :font "Fira Code" :foreground "#aaaaaa" :height 120)
+   'default nil :foreground "#cccccc" :height 100)
 
   (add-hook 'before-save-hook 'delete-trailing-whitespace))
 
@@ -85,7 +90,8 @@
   :hook js2-mode)
 
 (use-package avy
-  :bind ("C-'" . avy-goto-char-timer)
+  :bind (:map isearch-mode-map
+         ("C-'" . avy-isearch))
   :config
   (setq avy-style 'at-full)
   (setq avy-timeout-seconds 0.5)
@@ -100,12 +106,10 @@
   (company-tng-configure-default))
 
 (use-package company-lsp
-  :after company
+  :after (company yasnippet)
   :config
-  (setq company-lsp-enable-snippet nil
-        company-lsp-cache-candidates nil)
-  (push 'company-lsp company-backends)
-  (push 'java-mode company-global-modes))
+  (setq company-lsp-async t
+        company-lsp-cache-candidates t))
 
 (use-package counsel
   :after (ivy)
@@ -120,7 +124,14 @@
 (use-package counsel-projectile
   :after (projectile))
 
+(use-package dap-mode
+  :after lsp-mode
+  :config
+  (dap-mode t)
+  (dap-ui-mode t))
+
 (use-package dimmer
+  :disabled
   :config
   (setq dimmer-fraction 0.5)
   (dimmer-mode 1))
@@ -129,7 +140,7 @@
   :no-require t
   :ensure nil
   :hook ((emacs-lisp-mode . smartparens-mode)
-         (emacs-lisp-mode . turn-on-eldoc-mode)
+         (emacs-lisp-mode . eldoc-mode)
          (emacs-lisp-mode . company-mode)))
 
 (use-package emmet-mode)
@@ -196,6 +207,7 @@
 (use-package evil
   :init
   (setq evil-want-integration nil)
+  (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
   :config
   (setq-default evil-shift-width 2)
@@ -208,8 +220,14 @@
   :after evil
   :init
   (setq evil-collection-setup-minibuffer t)
-  :config
-  (evil-collection-init))
+
+  (evil-collection-init)
+
+  (evil-collection-define-key 'insert 'ivy-minibuffer-map
+    (kbd "C-n") nil
+    (kbd "C-p") nil
+    (kbd "C-k") 'ivy-previous-line
+    (kbd "C-j") 'ivy-next-line))
 
 (use-package evil-exchange
   :config
@@ -232,7 +250,7 @@
 (use-package feature-mode
   :config
   (general-define-key
-   :prefix "C-;"
+   :prefix "M-SPC"
    :keymaps 'feature-mode-map
 
    "cta" '(feature-verify-all-scenarios-in-project
@@ -241,9 +259,17 @@
    "ctt" '(feature-verify-all-scenarios-in-buffer
            :which-key "run scenarios in buffer")))
 
-(use-package flycheck-flow)
+(use-package flycheck-flow
+  :disabled)
+
+(use-package flycheck-jest
+  :disabled
+  :after flycheck
+  :config
+  (flycheck-jest-setup))
 
 (use-package flow-minor-mode
+  :disabled
   :after (add-node-modules-path flycheck-flow)
   :hook ((js2-mode . flow-minor-enable-automatically)
          (js2-mode . flycheck-mode))
@@ -255,11 +281,10 @@
 (use-package general
   :config
   (general-create-definer ior3k-local-leader-def
-    :prefix "C-; m")
+    :prefix "M-SPC m")
 
   (general-define-key
    "C-w" 'backward-kill-word
-   "C-x w" 'kill-region
    "s-k" 'windmove-up
    "s-j" 'windmove-down
    "s-l" 'windmove-right
@@ -268,23 +293,48 @@
   (general-define-key
    :states 'normal
 
-   "+" 'universal-argument
-   "q" 'quit-window)
+   "SPC" 'evil-scroll-page-down
+   "+"   'universal-argument
+   "q"   'quit-window
+   "'"   'avy-goto-char-timer)
+
+  (defun ior3k-insert-semicolon-at-eol ()
+    (interactive)
+    (end-of-line)
+    (self-insert-command 1))
+
+  (defun ior3k-find-project-org-in-project ()
+    (interactive)
+    (find-file (expand-file-name "project.org" (projectile-project-root))))
 
   (general-define-key
-   :prefix "C-;"
+   :states 'insert
+   :keymaps '(java-mode-map rjsx-mode-map)
+   ";" 'ior3k-insert-semicolon-at-eol)
 
-   "C-;" 'counsel-M-x
+  (general-define-key
+   :states '(normal motion)
 
-   "b"  '(:ignore t :which-key "buffers")
-   "bb" '(ivy-switch-buffer :which-key "switch to buffer")
-   "bd" '(kill-this-buffer :which-key "kill current buffer")
-   "bs" '(save-buffer :which-key "save buffer")
-   "bw" '(write-file :which-key "write to file")
+   "L" 'evil-forward-arg
+   "H" 'evil-backward-arg)
+
+  (general-define-key
+   :keymaps 'evil-inner-text-objects-map
+
+   "a" 'evil-inner-arg)
+
+  (general-define-key
+   :keymaps 'evil-outer-text-objects-map
+
+   "a" 'evil-outer-arg)
+
+  (general-define-key
+   :states '(normal visual motion insert emacs)
+   :prefix "M-SPC"
+
+   "M-SPC" 'counsel-M-x
 
    "c"  '(:ignore t :which-key "code")
-   "ce" '(eval-last-sexp :which-key "eval last code block")
-   "ci" '(counsel-imenu :which-key "imenu")
    "cm" '(comment-dwim :which-key "comment dwim")
 
    "cS" '(:ignore t :which-key "snippets")
@@ -296,11 +346,12 @@
           :which-key "toggle test file")
    "cv" '(minitest-verify :which-key "run tests in file")
 
-   "e"  '(:ignore t :which-key "emacs")
-   "em" '(evil-record-macro :which-key "record macro")
-   "ep" '(package-list-packages :which-key "list packages")
-   "eq" '(save-buffers-kill-terminal :which-key "quit emacs")
-   "es" '(prodigy :which-key "servers")
+   "d"  '(:ignore t :which-key "delete")
+   "db" '(kill-this-buffer :which-key "current buffer")
+   "de" '(save-buffers-kill-terminal :which-key "emacs")
+   "dm" '(delete-frame :which-key "current frame")
+   "dw" '(delete-window :which-key "this window")
+   "dW" '(delete-other-windows :which-key "other windows")
 
    "f"  '(:ignore t :which-key "files")
    "fd" '(delete-current-file :which-key "delete current file")
@@ -309,28 +360,55 @@
    "fi" '(insert-file :which-key "insert file contents")
    "fv" '(find-alternate-file :which-key "find alternate file")
 
-   "h"  '(:ignore t :which-key "help")
-   "hf" '(counsel-describe-function :which-key "describe function")
-   "hk" '(describe-key :which-key "describe key")
-   "hm" '(describe-mode :which-key "describe mode")
-   "hv" '(counsel-describe-variable :which-key "describe variable")
+   "g"   '(:ignore t :which-key "go to")
+   "ga"  '(counsel-projectile :which-key "buffer or file")
+   "gb"  '(ivy-switch-buffer :which-key "buffer")
+   "ge"  '(flycheck-next-error :which-key "next error")
+   "gE"  '(flycheck-previous-error :which-key "previous error")
+   "gi"  '(counsel-imenu :which-key "imenu")
+   "gf"  '(counsel-find-file :which-key "in current directory")
+   "gF"  '(counsel-projectile-find-file :which-key "in project")
+   "gg"  '(counsel-projectile :which-key "buffer or file")
+   "go"  '(:ignore t :which-key "ocurrences")
+   "gos" '(counsel-projectile-ag :which-key "free search")
+
+   "i"  '(:ignore t :which-key "insert")
+   "ii" '(lsp-java-add-import :which-key "import")
+
+   "m"  '(:ignore t :which-key "manage")
+   "mp" '(package-list-packages :which-key "packages")
+   "ms" '(prodigy :which-key "servers")
+
+   "n"  '(:ignore t :which-key "new")
+   "nm" '(evil-record-macro :which-key "macro")
+
+   "o"   '(:ignore t :which-key "open")
+   "oc"  '(projectile-rails-console :which-key "console")
+   "oh"  '(:ignore t :which-key "help")
+   "ohf" '(counsel-describe-function :which-key "function")
+   "ohk" '(describe-key :which-key "key")
+   "ohm" '(describe-mode :which-key "mode")
+   "ohv" '(counsel-describe-variable :which-key "variable")
+   "oj"  '(ior3k-find-project-org-in-project :which-key "project file")
+   "op"  '(counsel-projectile-switch-project :which-key "project")
+   "oq"  '(sql-connect :which-key "database connection")
+   "om"  '(make-frame-command :which-key "frame")
+   "os"  '(projectile-run-eshell :which-key "shell in project")
+   "ov"  '(magit-status :which-key "git status")
+   "ow"  '(:ignore t :which-key "window")
+   "owj" '(split-window-below :which-key "below")
+   "owl" '(split-window-right :which-key "right")
 
    "p"  '(:ignore t :which-key "projects")
-   "pb" '(counsel-projectile :which-key "switch to buffer of file")
-   "pc" '(projectile-rails-console :which-key "run console")
-   "pe" '(projectile-dired :which-key "dired in project root")
-   "pf" '(counsel-projectile-find-file :which-key "find file in project")
-   "ph" '(projectile-run-eshell
-          :which-key "shell in project root")
-   "pp" '(counsel-projectile-switch-project :which-key "switch project")
-   "ps" '(counsel-projectile-ag :which-key "search in project")
-   "pv" '(magit-status :which-key "git status")
+   "px" '(bpr-spawn :which-key "run async shell command")
 
-   "w"  '(:ignore t :which-key "windows")
-   "wb" '(split-window-below :which-key "open new window below")
-   "wd" '(delete-window :which-key "delete window")
-   "wk" '(delete-other-windows :which-key "keep this window only")
-   "wr" '(split-window-right :which-key "open new window to the right")))
+   "s"  '(:ignore t :which-key "save")
+   "sb" '(save-buffer :which-key "this buffer")
+   "sf" '(write-file :which-key "to file")
+   "ss" '(save-buffer :which-key "this buffer")
+
+   "x"  '(:ignore t :which-key "execute")
+   "xe" '(eval-last-sexp :which-key "eval last code block")))
 
 (use-package highlight-indent-guides
   :hook ((prog-mode . highlight-indent-guides-mode)
@@ -351,11 +429,6 @@
   :no-require t
   :ensure nil
   :after general
-  :hook ((java-mode . flycheck-mode)
-         (java-mode . smartparens-mode)
-         (java-mode . subword-mode)
-         (java-mode . company-mode)
-         (java-mode . auto-revert-mode))
   :init
   (ior3k-local-leader-def
    :states 'normal
@@ -363,30 +436,25 @@
 
    "a" '(lsp-execute-code-action :which-key "code actions"))
 
-  (defun ior3k-insert-semicolon-at-eol ()
-    (interactive)
-    (end-of-line)
-    (self-insert-command 1))
-
-  (general-define-key
-   :states 'insert
-   :keymaps 'java-mode-map
-   ";" 'ior3k-insert-semicolon-at-eol)
-
   (defun ior3k-java-settings ()
     (setq c-basic-offset 4
           fill-column 100
           tab-width 4
           evil-shift-width 4)
 
-    (c-set-offset 'statement-cont '++)
+    (c-set-offset 'statement-cont '+)
     (c-set-offset 'arglist-intro '+)
     (c-set-offset 'arglist-close 0))
 
-  (add-hook 'java-mode-hook 'ior3k-java-settings))
+  (add-hook 'java-mode-hook
+            (lambda ()
+              (setq-local company-backends (list 'company-lsp))))
+  (add-hook 'java-mode-hook 'smartparens-mode)
+  (add-hook 'java-mode-hook 'subword-mode)
+  (add-hook 'java-mode-hook 'ior3k-java-settings)
+  (add-hook 'java-mode-hook 'auto-revert-mode))
 
 (use-package js2-mode
-  :mode "\\.js\\'"
   :commands js2-mode
   :bind
   (:map js2-mode-map
@@ -397,19 +465,30 @@
   (setq js2-mode-show-strict-warnings nil)
   (setq js2-bounce-indent-p t))
 
+(use-package json-mode)
+
 (use-package lsp-mode
   :config
-  (setq lsp-inhibit-message t))
+  (setq lsp-inhibit-message t
+        lsp-eldoc-render-all nil
+        lsp-highlight-symbol-at-point nil
+        lsp-prefer-flymake nil))
 
 (use-package lsp-java
-  :hook (java-mode . lsp-java-enable)
+  :after lsp
   :config
   (setq lsp-java-enable-file-watch nil)
   (setq lsp-java-organize-imports nil)
-  (setq lsp-java-save-action-organize-imports nil))
+  (setq lsp-java-save-action-organize-imports nil)
+
+  (add-hook 'java-mode-hook 'lsp)
+  (add-hook 'java-mode-hook 'flycheck-mode)
+  (add-hook 'java-mode-hook 'company-mode)
+  (add-hook 'java-mode-hook 'lsp-ui-mode))
 
 (use-package lsp-ui
-  :hook (lsp-after-open . lsp-ui-mode))
+  :config
+  (setq lsp-ui-sideline-update-mode 'point))
 
 (use-package magit
   :commands (magit-status)
@@ -420,8 +499,9 @@
   (add-to-list 'same-window-regexps "^magit"))
 
 (use-package prettier-js
-  :after (js2-mode)
-  :hook (js2-mode . prettier-js-mode))
+  :after (js2-mode rjsx-mode)
+  :hook ((js2-mode . prettier-js-mode)
+         (rjsx-mode . prettier-js-mode)))
 
 (use-package prodigy
   :config
@@ -430,6 +510,11 @@
     :command "rails"
     :args '("server" "thin")
     :ready-message "Listening on .*, CTRL\\+C to stop")
+
+  (prodigy-define-tag
+    :name 'webpack-server
+    :command "webpack-dev-server"
+    :ready-message ": Compiled successfully")
 
   (prodigy-define-tag
     :name 'spring-boot-server
@@ -441,7 +526,9 @@
     :name 'yarn-server
     :command "yarn"
     :args '("start")
-    :ready-message "You can now view .* in the browser."))
+    :ready-message "You can now view .* in the browser.")
+
+  (add-to-list 'same-window-regexps "^\\*prodigy"))
 
 (use-package prog-mode
   :after (company)
@@ -450,7 +537,8 @@
   :hook
   ((prog-mode . smartparens-mode)
    (prog-mode . subword-mode)
-   (prog-mode . company-mode)))
+   (prog-mode . company-mode)
+   (prog-mode . flycheck-mode)))
 
 (use-package projectile
   :config
@@ -468,14 +556,16 @@
   (setq pug-tab-width 2))
 
 (use-package rjsx-mode
-  :after js2-mode
   :mode "\\.js\\'")
 
 (use-package smartparens
   :init (require 'smartparens-config)
-  :config (show-smartparens-global-mode 1)
+  :config
+  (setq sp-escape-quotes-after-insert nil)
+  (show-smartparens-global-mode 1)
   :hook ((smartparens-mode . sp-use-smartparens-bindings)
-         (enh-ruby-mode . (lambda () (require 'smartparens-ruby)))))
+         (enh-ruby-mode . (lambda () (require 'smartparens-ruby)))
+         (rjsx-mode . (lambda () (require 'smartparens-javascript)))))
 
 (use-package stylus-mode)
 
@@ -483,14 +573,14 @@
   :config
   (setq telephone-line-evil-use-short-tag t)
   (setq telephone-line-lhs
-        '((evil   . (telephone-line-evil-tag-segment))
-          (accent . (telephone-line-projectile-segment
-                     telephone-line-process-segment))
-          (nil    . (telephone-line-buffer-segment))))
-  (setq telephone-line-primary-left-separator 'telephone-line-gradient
-        telephone-line-secondary-left-separator 'telephone-line-nil
-        telephone-line-primary-right-separator 'telephone-line-gradient
-        telephone-line-secondary-right-separator 'telephone-line-nil)
+        '((evil   . (telephone-line-airline-position-segment))
+          (accent . (telephone-line-process-segment))
+          (nil    . (telephone-line-buffer-modified-segment
+                     telephone-line-buffer-name-segment))))
+  (setq telephone-line-rhs
+        '((nil   .  nil)
+          (accent . (telephone-line-projectile-segment))
+          (evil    . (telephone-line-evil-tag-segment))))
 
   (telephone-line-mode 1))
 
@@ -512,6 +602,13 @@
 
 (use-package yasnippet
   :config
+  (defun ior3k/downcase-first-char (string)
+    "Capitalize only the first character of the input STRING."
+    (when (and string (> (length string) 0))
+      (let ((first-char (substring string nil 1))
+            (rest-str   (substring string 1)))
+        (concat (downcase first-char) rest-str))))
+
   (yas-global-mode 1))
 
 (use-package projects
@@ -527,7 +624,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (feature-mode evil-args highlight-indent-guides evil-string-inflection exec-path-from-shell add-node-modules-path counsel-projectile yaml-mode evil-exchange lsp-java company-lsp lsp-ui wgrep projectile-rails evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js flow-minor-mode flycheck-flow xterm-color general yasnippet js2-mode enh-ruby-mode smartparens magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
+    (flycheck-jest dap-mode dap-java json-mode bpr feature-mode evil-args highlight-indent-guides evil-string-inflection exec-path-from-shell add-node-modules-path counsel-projectile yaml-mode evil-exchange lsp-java company-lsp lsp-ui wgrep projectile-rails evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js flow-minor-mode flycheck-flow xterm-color general yasnippet js2-mode enh-ruby-mode smartparens magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

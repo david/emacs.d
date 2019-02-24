@@ -2,7 +2,6 @@
 # name: test
 # key: test
 # --
-@Test
-public void ${1:name}() {
+test("${description}", () => {
   $0
-}
+});

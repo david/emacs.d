@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: def
+# key: d
+# --
+def ${name}${(${args})}
+  $0
+end

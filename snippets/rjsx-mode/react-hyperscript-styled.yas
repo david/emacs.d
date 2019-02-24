@@ -1,0 +1,12 @@
+# key: hyperscs
+# name: hyperscs
+# --
+import h from "react-hyperscript";
+import injectSheet from "react-jss";
+
+const ${1:Component} = (${2:{ classes${3:, args} }}) => h($0);
+
+const w$1 = injectSheet({
+})($1);
+
+export default w$1;
