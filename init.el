@@ -80,10 +80,7 @@
 
 (use-package site-minibuffer
   :no-require t
-  :ensure nil
-  :bind
-  (:map minibuffer-local-map
-   ("C-w" . backward-kill-word)))
+  :ensure nil)
 
 (use-package add-node-modules-path
   :commands add-node-modules-path
