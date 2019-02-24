@@ -70,13 +70,6 @@
 
   (add-hook 'before-save-hook 'delete-trailing-whitespace))
 
-(use-package site-modeline
-  :no-require t
-  :ensure nil
-  :config
-  (column-number-mode 1)
-  (line-number-mode 1))
-
 (use-package site-minibuffer
   :no-require t
   :ensure nil
