@@ -250,24 +250,11 @@
    "ctt" '(feature-verify-all-scenarios-in-buffer
            :which-key "run scenarios in buffer")))
 
-(use-package flycheck-flow
-  :disabled)
-
 (use-package flycheck-jest
   :disabled
   :after flycheck
   :config
   (flycheck-jest-setup))
-
-(use-package flow-minor-mode
-  :disabled
-  :after (add-node-modules-path flycheck-flow)
-  :hook ((js2-mode . flow-minor-enable-automatically)
-         (js2-mode . flycheck-mode))
-  :config
-  (flycheck-add-mode 'javascript-flow 'flow-minor-mode)
-  (flycheck-add-mode 'javascript-eslint 'flow-minor-mode)
-  (flycheck-add-next-checker 'javascript-eslint 'javascript-flow))
 
 (use-package general
   :config
@@ -615,7 +602,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck-jest dap-mode dap-java json-mode bpr feature-mode evil-args highlight-indent-guides evil-string-inflection exec-path-from-shell add-node-modules-path counsel-projectile yaml-mode evil-exchange lsp-java company-lsp lsp-ui wgrep projectile-rails evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js flow-minor-mode flycheck-flow xterm-color general yasnippet js2-mode enh-ruby-mode smartparens magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
+    (flycheck-jest dap-mode dap-java json-mode bpr feature-mode evil-args highlight-indent-guides evil-string-inflection exec-path-from-shell add-node-modules-path counsel-projectile yaml-mode evil-exchange lsp-java company-lsp lsp-ui wgrep projectile-rails evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js xterm-color general yasnippet js2-mode enh-ruby-mode smartparens magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
