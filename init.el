@@ -205,7 +205,8 @@
 
   (evil-mode 1))
 
-(use-package evil-args)
+(use-package evil-args
+  :after evil)
 
 (use-package evil-collection
   :after evil
