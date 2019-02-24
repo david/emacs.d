@@ -75,12 +75,13 @@
   :ensure nil
   :config
   (column-number-mode 1)
-  (line-number-mode 1)
-  (defalias 'yes-or-no-p 'y-or-n-p))
+  (line-number-mode 1))
 
 (use-package site-minibuffer
   :no-require t
-  :ensure nil)
+  :ensure nil
+  :config
+  (defalias 'yes-or-no-p 'y-or-n-p))
 
 (use-package add-node-modules-path
   :commands add-node-modules-path
