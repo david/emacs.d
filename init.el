@@ -376,8 +376,12 @@
    "mp" '(package-list-packages :which-key "packages")
    "ms" '(prodigy :which-key "servers")
 
-   "n"  '(:ignore t :which-key "new")
-   "nm" '(evil-record-macro :which-key "macro")
+   "n"   '(:ignore t :which-key "new")
+   "nc"  '(evil-record-macro :which-key "macro")
+   "nm"  '(make-frame-command :which-key "frame")
+   "nw"  '(:ignore t :which-key "window")
+   "nwj" '(split-window-below :which-key "below")
+   "nwl" '(split-window-right :which-key "right")
 
    "o"   '(:ignore t :which-key "open")
    "oc"  '(projectile-rails-console :which-key "console")
@@ -389,12 +393,8 @@
    "oj"  '(ior3k-find-project-org-in-project :which-key "project file")
    "op"  '(counsel-projectile-switch-project :which-key "project")
    "oq"  '(sql-connect :which-key "database connection")
-   "om"  '(make-frame-command :which-key "frame")
    "os"  '(projectile-run-eshell :which-key "shell in project")
    "ov"  '(magit-status :which-key "git status")
-   "ow"  '(:ignore t :which-key "window")
-   "owj" '(split-window-below :which-key "below")
-   "owl" '(split-window-right :which-key "right")
 
    "p"  '(:ignore t :which-key "projects")
    "px" '(bpr-spawn :which-key "run async shell command")
