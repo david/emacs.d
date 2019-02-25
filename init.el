@@ -557,7 +557,7 @@
           (nil    . (telephone-line-buffer-modified-segment
                      telephone-line-buffer-name-segment))))
   (setq telephone-line-rhs
-        '((nil   .  nil)
+        '((nil   .  (telephone-line-flycheck-segment))
           (accent . (telephone-line-projectile-segment))
           (evil    . (telephone-line-evil-tag-segment))))
 
