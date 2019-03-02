@@ -603,21 +603,6 @@
   :config
   (load-file "~/.emacs.d/projects.el"))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (flycheck-jest dap-mode dap-java json-mode bpr feature-mode evil-args highlight-indent-guides evil-string-inflection exec-path-from-shell add-node-modules-path counsel-projectile yaml-mode evil-exchange lsp-java company-lsp lsp-ui wgrep projectile-rails evil-surround prodigy company company-mode emmet-mode telephone-line evil-collection atom-one-dark atom-one-dark-theme rjsx-mode evil-magit evil-matchit evil stylus-mode pug-mode prettier-js xterm-color general yasnippet js2-mode enh-ruby-mode smartparens magit counsel ivy projectile avy dimmer which-key site-environment base16-theme use-package))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
 (defun delete-current-file ()
   "Removes file connected to current buffer and kills buffer."
   (interactive)
