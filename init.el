@@ -534,6 +534,13 @@
   :config
   (setq pug-tab-width 2))
 
+(use-package rainbow-delimiters
+  :hook ((prog-mode . rainbow-delimiters-mode)))
+
+(use-package rainbow-mode
+  :after rjsx-mode
+  :hook rjsx-mode)
+
 (use-package rjsx-mode
   :mode "\\.js\\'")
 
