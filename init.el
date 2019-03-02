@@ -352,6 +352,8 @@
    "ii" '(lsp-java-add-import :which-key "import")
 
    "m"  '(:ignore t :which-key "manage")
+   "mf" '(:ignore t :which-key "files")
+   "mfr" '(er-rename-file-and-buffer :which-key "rename")
    "mp" '(package-list-packages :which-key "packages")
    "ms" '(prodigy :which-key "servers")
 
@@ -621,3 +623,16 @@
         (delete-file filename)
         (kill-buffer buffer)
         (message "File '%s' removed" filename)))))
+
+(defun er-rename-file-and-buffer ()
+  "Rename the current buffer and file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (message "Buffer is not visiting a file!")
+      (let ((new-name (read-file-name "New name: " filename)))
+        (cond
+         ((vc-backend filename) (vc-rename-file filename new-name))
+         (t
+          (rename-file filename new-name t)
+          (set-visited-file-name new-name t t)))))))
