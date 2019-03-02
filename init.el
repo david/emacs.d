@@ -530,6 +530,7 @@
 (use-package projectile-rails
   :after projectile
   :config
+  (add-to-list 'same-window-regexps "^\\*rails")
   (projectile-rails-global-mode 1))
 
 (use-package pug-mode
