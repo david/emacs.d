@@ -219,7 +219,8 @@
     (kbd "C-n") nil
     (kbd "C-p") nil
     (kbd "C-k") 'ivy-previous-line
-    (kbd "C-j") 'ivy-next-line))
+    (kbd "C-j") 'ivy-next-line
+    (kbd "C-d") 'ivy-immediate-done)
 
 (use-package evil-exchange
   :config
