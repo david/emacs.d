@@ -283,9 +283,9 @@
     (end-of-line)
     (self-insert-command 1))
 
-  (defun ior3k-find-project-org-in-project ()
+  (defun ior3k-find-agenda-org-in-project ()
     (interactive)
-    (find-file (expand-file-name "project.org" (projectile-project-root))))
+    (find-file (expand-file-name "agenda.org" (projectile-project-root))))
 
   (general-define-key
    :states 'insert
@@ -365,6 +365,7 @@
    "nwl" '(split-window-right :which-key "right")
 
    "o"   '(:ignore t :which-key "open")
+   "oa"  '(ior3k-find-agenda-org-in-project :which-key "project agenda")
    "oc"  '(projectile-rails-console :which-key "console")
    "od"  '(dired :which-key "dired")
    "oh"  '(:ignore t :which-key "help")
@@ -372,7 +373,6 @@
    "ohk" '(describe-key :which-key "key")
    "ohm" '(describe-mode :which-key "mode")
    "ohv" '(counsel-describe-variable :which-key "variable")
-   "oj"  '(ior3k-find-project-org-in-project :which-key "project file")
    "op"  '(counsel-projectile-switch-project :which-key "project")
    "oq"  '(sql-connect :which-key "database connection")
    "os"  '(projectile-run-eshell :which-key "shell in project")
