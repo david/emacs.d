@@ -328,16 +328,10 @@
    "d"  '(:ignore t :which-key "delete")
    "db" '(kill-this-buffer :which-key "current buffer")
    "de" '(save-buffers-kill-terminal :which-key "emacs")
+   "df" '(delete-current-file :which-key "delete current file")
    "dm" '(delete-frame :which-key "current frame")
    "dw" '(delete-window :which-key "this window")
    "dW" '(delete-other-windows :which-key "other windows")
-
-   "f"  '(:ignore t :which-key "files")
-   "fd" '(delete-current-file :which-key "delete current file")
-   "fe" '(dired :which-key "dired")
-   "ff" '(counsel-find-file :which-key "find file")
-   "fi" '(insert-file :which-key "insert file contents")
-   "fv" '(find-alternate-file :which-key "find alternate file")
 
    "g"   '(:ignore t :which-key "go to")
    "ga"  '(counsel-projectile :which-key "buffer or file")
@@ -350,8 +344,10 @@
    "gg"  '(counsel-projectile :which-key "buffer or file")
    "go"  '(:ignore t :which-key "ocurrences")
    "gos" '(counsel-projectile-ag :which-key "free search")
+   "gv" '(find-alternate-file :which-key "alternate file")
 
    "i"  '(:ignore t :which-key "insert")
+   "if" '(insert-file :which-key "file contents")
    "ii" '(lsp-java-add-import :which-key "import")
 
    "m"  '(:ignore t :which-key "manage")
@@ -367,6 +363,7 @@
 
    "o"   '(:ignore t :which-key "open")
    "oc"  '(projectile-rails-console :which-key "console")
+   "od"  '(dired :which-key "dired")
    "oh"  '(:ignore t :which-key "help")
    "ohf" '(counsel-describe-function :which-key "function")
    "ohk" '(describe-key :which-key "key")
