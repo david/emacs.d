@@ -612,6 +612,12 @@
   :config
   (load-file "~/.emacs.d/projects.el"))
 
+(use-package sql
+  :no-require t
+  :ensure nil
+  :config
+  (add-to-list 'same-window-regexps "^\\*SQL"))
+
 (defun delete-current-file ()
   "Removes file connected to current buffer and kills buffer."
   (interactive)
