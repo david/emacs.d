@@ -547,6 +547,12 @@
 (use-package rjsx-mode
   :mode "\\.js\\'")
 
+(use-package sh-mode
+  :no-require t
+  :ensure nil
+  :config
+  (setq sh-basic-offset 2))
+
 (use-package smartparens
   :init (require 'smartparens-config)
   :config
