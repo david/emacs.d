@@ -457,7 +457,6 @@
 (use-package lsp-java
   :after lsp
   :config
-  (setq lsp-java-enable-file-watch nil)
   (setq lsp-java-organize-imports nil)
   (setq lsp-java-save-action-organize-imports nil)
 
