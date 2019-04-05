@@ -234,6 +234,10 @@
   :config
   (global-evil-matchit-mode 1))
 
+(use-package evil-mc
+  :config
+  (global-evil-mc-mode 1))
+
 (use-package evil-string-inflection)
 
 (use-package evil-surround
@@ -660,7 +664,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (indium flycheck yasnippet yaml-mode xterm-color which-key wgrep use-package telephone-line stylus-mode smartparens rjsx-mode rainbow-mode rainbow-delimiters pug-mode projectile-rails prodigy prettier-js lsp-ui lsp-java json-mode highlight-indent-guides general feature-mode exec-path-from-shell evil-surround evil-string-inflection evil-matchit evil-magit evil-exchange evil-collection evil-args enh-ruby-mode emmet-mode dimmer dap-mode counsel-projectile company-lsp avy atom-one-dark-theme add-node-modules-path))))
+    (evil-mc indium flycheck yasnippet yaml-mode xterm-color which-key wgrep use-package telephone-line stylus-mode smartparens rjsx-mode rainbow-mode rainbow-delimiters pug-mode projectile-rails prodigy prettier-js lsp-ui lsp-java json-mode highlight-indent-guides general feature-mode exec-path-from-shell evil-surround evil-string-inflection evil-matchit evil-magit evil-exchange evil-collection evil-args enh-ruby-mode emmet-mode dimmer dap-mode counsel-projectile company-lsp avy atom-one-dark-theme add-node-modules-path))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
