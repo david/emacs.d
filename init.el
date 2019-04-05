@@ -262,8 +262,9 @@
 
 (use-package general
   :config
-  (general-create-definer ior3k-local-leader-def
-    :prefix "M-SPC m")
+  (general-create-definer ior3k-def
+    :states '(normal visual motion insert emacs)
+    :prefix "M-SPC")
 
   (general-define-key
    "C-w" 'backward-kill-word
@@ -310,14 +311,10 @@
 
    "a" 'evil-outer-arg)
 
-  (general-define-key
-   :states '(normal visual motion insert emacs)
-   :prefix "M-SPC"
-
+  (ior3k-def
    "M-SPC" 'counsel-M-x
 
    "c"  '(:ignore t :which-key "code")
-   "cm" '(comment-dwim :which-key "comment dwim")
 
    "cS" '(:ignore t :which-key "snippets")
    "cSn" '(yas-new-snippet :which-key "new snippet")
@@ -329,6 +326,7 @@
    "cv" '(minitest-verify :which-key "run tests in file")
 
    "d"  '(:ignore t :which-key "delete")
+   "dc" '(comment-dwim :which-key "comment dwim")
    "db" '(kill-this-buffer :which-key "current buffer")
    "de" '(save-buffers-kill-terminal :which-key "emacs")
    "df" '(delete-current-file :which-key "delete current file")
@@ -336,25 +334,35 @@
    "dw" '(delete-window :which-key "this window")
    "dW" '(delete-other-windows :which-key "other windows")
 
+   "e"   '(:ignore t :which-key "edit")
+   "ec"  '(:ignore t :which-key "conflict")
+   "eca" '(smerge-keep-current :which-key "keep all parts")
+   "ecc" '(smerge-keep-current :which-key "keep part under cursor")
+   "ecl" '(smerge-keep-upper :which-key "keep lower part")
+   "ecu" '(smerge-keep-upper :which-key "keep upper part")
+   "ef"  '(:ignore t :which-key "files")
+   "efr" '(er-rename-file-and-buffer :which-key "rename")
+
    "g"   '(:ignore t :which-key "go to")
-   "ga"  '(counsel-projectile :which-key "buffer or file")
+   "ga"  '(ivy-switch-buffer :which-key "buffer")
    "ge"  '(flycheck-next-error :which-key "next error")
+   "gc"  '(smerge-next :which-key "next conflict")
+   "gC"  '(smerge-prev :which-key "previous conflict")
    "gE"  '(flycheck-previous-error :which-key "previous error")
    "gi"  '(counsel-imenu :which-key "imenu")
    "gf"  '(counsel-find-file :which-key "in current directory")
    "gF"  '(counsel-projectile-find-file :which-key "in project")
-   "gg"  '(ivy-switch-buffer :which-key "buffer")
+   "gg"  '(counsel-projectile :which-key "buffer or file")
    "go"  '(:ignore t :which-key "ocurrences")
    "gos" '(counsel-projectile-ag :which-key "free search")
    "gv" '(find-alternate-file :which-key "alternate file")
 
    "i"  '(:ignore t :which-key "insert")
+   "ic" '(comment-dwim :which-key "comment dwim")
    "if" '(insert-file :which-key "file contents")
    "ii" '(lsp-java-add-import :which-key "import")
 
    "m"  '(:ignore t :which-key "manage")
-   "mf" '(:ignore t :which-key "files")
-   "mfr" '(er-rename-file-and-buffer :which-key "rename")
    "mp" '(package-list-packages :which-key "packages")
    "ms" '(prodigy :which-key "servers")
 
@@ -414,11 +422,10 @@
   :ensure nil
   :after general
   :init
-  (ior3k-local-leader-def
-   :states 'normal
+  (ior3k-def
    :keymaps 'java-mode-map
 
-   "a" '(lsp-execute-code-action :which-key "code actions"))
+   "oa" '(lsp-execute-code-action :which-key "code actions"))
 
   (defun ior3k-java-settings ()
     (setq c-basic-offset 4
