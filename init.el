@@ -482,6 +482,7 @@
 
 (use-package lsp-ui
   :config
+  (setq lsp-ui-doc-enable nil)
   (setq lsp-ui-sideline-update-mode 'point))
 
 (use-package magit
