@@ -434,7 +434,7 @@
   (ior3k-def
    :keymaps 'java-mode-map
 
-   "oa" '(lsp-execute-code-action :which-key "code actions"))
+   "ot" '(lsp-execute-code-action :which-key "code actions"))
 
   (defun ior3k-java-settings ()
     (setq c-basic-offset 4
