@@ -403,7 +403,8 @@
    "ss" '(save-buffer :which-key "this buffer")
 
    "x"  '(:ignore t :which-key "execute")
-   "xe" '(eval-last-sexp :which-key "eval last code block")))
+   "xe" '(eval-last-sexp :which-key "eval last code block")
+   "xs" '(async-shell-command :which-key "async shell command")))
 
 (use-package highlight-indent-guides
   :hook ((prog-mode . highlight-indent-guides-mode)
