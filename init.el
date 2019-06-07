@@ -371,10 +371,6 @@
    "if" '(insert-file :which-key "file contents")
    "ii" '(lsp-java-add-import :which-key "import")
 
-   "m"  '(:ignore t :which-key "manage")
-   "mp" '(package-list-packages :which-key "packages")
-   "ms" '(prodigy :which-key "servers")
-
    "n"   '(:ignore t :which-key "new")
    "nc"  '(evil-record-macro :which-key "macro")
    "nm"  '(make-frame-command :which-key "frame")
@@ -390,9 +386,11 @@
    "ohf" '(counsel-describe-function :which-key "function")
    "ohk" '(describe-key :which-key "key")
    "ohm" '(describe-mode :which-key "mode")
+   "ok"  '(package-list-packages :which-key "packages")
    "ohv" '(counsel-describe-variable :which-key "variable")
    "op"  '(counsel-projectile-switch-project :which-key "project")
    "oq"  '(sql-connect :which-key "database connection")
+   "or"  '(prodigy :which-key "servers")
    "os"  '(projectile-run-eshell :which-key "shell in project")
    "ov"  '(magit-status :which-key "git status")
 
