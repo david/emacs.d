@@ -127,6 +127,11 @@
   (setq dimmer-fraction 0.5)
   (dimmer-mode 1))
 
+(use-package docker
+  :after (general))
+
+(use-package dockerfile-mode)
+
 (use-package emacs-lisp
   :no-require t
   :ensure nil
@@ -501,6 +506,15 @@
 (use-package prodigy
   :config
   (prodigy-define-tag
+    :name 'docker
+    :ready-message ".*Attaching to .*")
+
+  (prodigy-define-tag
+    :name 'docker-compose
+    :command "docker-compose"
+    :args '("up"))
+
+  (prodigy-define-tag
     :name 'rails-thin-server
     :command "rails"
     :args '("server" "thin")
@@ -523,7 +537,13 @@
     :args '("start")
     :ready-message "You can now view .* in the browser.")
 
-  (add-to-list 'same-window-regexps "^\\*prodigy"))
+  (add-to-list 'same-window-regexps "^\\*prodigy")
+
+  (defun ior3k/prodigy-define-docker-compose-service (project cwd)
+    (prodigy-define-service
+      :name project
+      :cwd cwd
+      :tags '(docker docker-compose))))
 
 (use-package prog-mode
   :after (company)
@@ -667,7 +687,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (rubocop evil-mc indium flycheck yasnippet yaml-mode xterm-color which-key wgrep use-package telephone-line stylus-mode smartparens rjsx-mode rainbow-mode rainbow-delimiters pug-mode projectile-rails prodigy prettier-js lsp-ui lsp-java json-mode highlight-indent-guides general feature-mode exec-path-from-shell evil-surround evil-string-inflection evil-matchit evil-magit evil-exchange evil-collection evil-args enh-ruby-mode emmet-mode dimmer dap-mode counsel-projectile company-lsp avy atom-one-dark-theme add-node-modules-path))))
+    (docker dockerfile-mode rubocop evil-mc indium flycheck yasnippet yaml-mode xterm-color which-key wgrep use-package telephone-line stylus-mode smartparens rjsx-mode rainbow-mode rainbow-delimiters pug-mode projectile-rails prodigy prettier-js lsp-ui lsp-java json-mode highlight-indent-guides general feature-mode exec-path-from-shell evil-surround evil-string-inflection evil-matchit evil-magit evil-exchange evil-collection evil-args enh-ruby-mode emmet-mode dimmer dap-mode counsel-projectile company-lsp avy atom-one-dark-theme add-node-modules-path))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
