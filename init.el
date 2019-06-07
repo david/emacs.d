@@ -597,12 +597,14 @@
 
 (use-package smartparens
   :init (require 'smartparens-config)
-  :config
-  (setq sp-escape-quotes-after-insert nil)
-  (show-smartparens-global-mode 1)
   :hook ((smartparens-mode . sp-use-smartparens-bindings)
          (enh-ruby-mode . (lambda () (require 'smartparens-ruby)))
-         (rjsx-mode . (lambda () (require 'smartparens-javascript)))))
+         (rjsx-mode . (lambda () (require 'smartparens-javascript))))
+  :config
+  (setq sp-escape-quotes-after-insert nil)
+  (setq sp-escape-wrapped-region nil)
+
+  (show-smartparens-global-mode 1))
 
 (use-package stylus-mode)
 
