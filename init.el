@@ -222,6 +222,7 @@
 
   (evil-collection-define-key 'insert 'ivy-minibuffer-map
     (kbd "C-n") nil
+
     (kbd "C-p") nil
     (kbd "C-k") 'ivy-previous-line
     (kbd "C-j") 'ivy-next-line
@@ -376,6 +377,7 @@
    "nm"  '(make-frame-command :which-key "frame")
    "nw"  '(:ignore t :which-key "window")
    "nwj" '(split-window-below :which-key "below")
+
    "nwl" '(split-window-right :which-key "right")
 
    "o"   '(:ignore t :which-key "open")
