@@ -347,7 +347,7 @@
    "ec"  '(:ignore t :which-key "conflict")
    "eca" '(smerge-keep-current :which-key "keep all parts")
    "ecc" '(smerge-keep-current :which-key "keep part under cursor")
-   "ecl" '(smerge-keep-upper :which-key "keep lower part")
+   "ecl" '(smerge-keep-lower :which-key "keep lower part")
    "ecu" '(smerge-keep-upper :which-key "keep upper part")
    "ef"  '(:ignore t :which-key "files")
    "efr" '(er-rename-file-and-buffer :which-key "rename")
