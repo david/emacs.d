@@ -505,6 +505,11 @@
 (use-package prodigy
   :config
   (prodigy-define-tag
+    :name 'invoker
+    :command "invoker"
+    :args '("start"))
+
+  (prodigy-define-tag
     :name 'docker
     :ready-message ".*Attaching to .*")
 
