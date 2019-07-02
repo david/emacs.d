@@ -362,6 +362,7 @@
    "ecu" '(smerge-keep-upper :which-key "keep upper part")
    "ef"  '(:ignore t :which-key "files")
    "efr" '(er-rename-file-and-buffer :which-key "rename")
+   "ep"  '(package-list-packages :which-key "packages")
 
    "g"   '(:ignore t :which-key "go to")
    "ga"  '(ivy-switch-buffer :which-key "buffer")
@@ -398,7 +399,6 @@
    "ohf" '(counsel-describe-function :which-key "function")
    "ohk" '(describe-key :which-key "key")
    "ohm" '(describe-mode :which-key "mode")
-   "ok"  '(package-list-packages :which-key "packages")
    "ohv" '(counsel-describe-variable :which-key "variable")
    "op"  '(counsel-projectile-switch-project :which-key "project")
    "oq"  '(sql-connect :which-key "database connection")
