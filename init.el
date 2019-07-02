@@ -27,6 +27,14 @@
   :config
   (setenv "PAGER" "/bin/cat"))
 
+(use-package site-compilation
+  :no-require t
+  :ensure nil
+  :config
+  (add-to-list 'same-window-regexps "^\\*compilation")
+  (add-hook 'compilation-filter-hook
+   (lambda () (ansi-color-apply-on-region (point-min) (point-max)))))
+
 (use-package atom-one-dark-theme
   :config
   (load-theme 'atom-one-dark t))
@@ -405,6 +413,8 @@
    "ss" '(save-buffer :which-key "this buffer")
 
    "x"  '(:ignore t :which-key "execute")
+   "xc" '(projectile-compile-project :which-key "compile")
+   "xC" '(recompile :which-key "recompile")
    "xe" '(eval-last-sexp :which-key "eval last code block")
    "xs" '(async-shell-command :which-key "async shell command")))
 
