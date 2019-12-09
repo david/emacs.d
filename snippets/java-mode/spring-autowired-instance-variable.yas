@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: autowired instance variable
-# key: awvv
-# --
-@Autowired
-private ${1:Type} ${1:$(ior3k/downcase-first-char yas-text)};

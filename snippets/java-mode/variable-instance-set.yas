@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: instance variable set
-# key: ivs
+# name: variable: instance set
+# key: vis
 # --
 this.${1:name} = $1;

@@ -1,0 +1,7 @@
+# key: tbm
+# name: test: before method
+# --
+@Before
+public void ${name}() {
+    $0
+}

@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: local variable with constructor
-# key: lvc
+# name: variable: declaration with constructor
+# key: vc
 # --
 ${1:Type} ${name} = new $1(${args});

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: variable: declaration
+# key: v
+# --
+${1:Type} ${2:name}$0

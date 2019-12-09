@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: variable: declaration mirrored with constructor
+# key: vmc
+# --
+${1:Type} ${1:$(s-lower-camel-case yas-text)} = new $1(${args});

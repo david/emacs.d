@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: class: public static
+# key: cus
+# --
+public static class ${Name} {
+  $0
+}

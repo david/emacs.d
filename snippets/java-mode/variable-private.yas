@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: private instance variable
-# key: viv
+# name: variable: private
+# key: vv
 # --
 private ${Type} ${name};

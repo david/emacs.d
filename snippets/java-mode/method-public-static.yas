@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: method: public static
+# key: mus
+# --
+public static ${1:Type} ${2:name}($3) {
+   $0
+}

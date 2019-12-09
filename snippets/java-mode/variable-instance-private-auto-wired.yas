@@ -1,0 +1,5 @@
+# key: vvw
+# name: variable: private auto wired
+# --
+@Autowired
+private ${Type} ${name};$0

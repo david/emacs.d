@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: variable: declaration mirrored
+# key: vm
+# --
+${1:Type} ${1:$(s-lower-camel-case yas-text)}$0

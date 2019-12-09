@@ -1,5 +1,5 @@
-# key: vm
-# name: private method
+# key: mv
+# name: method: private
 # --
 private ${1:Type} ${2:name}(${3:args}) {
   $0

@@ -1,5 +1,0 @@
-# key: srv
-# name: spring repository instance variable
-# --
-@Repository
-private ${1:Type} ${1:$(ior3k/downcase-first-char yas-text)};

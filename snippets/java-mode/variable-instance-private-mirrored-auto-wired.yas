@@ -1,0 +1,5 @@
+# key: vipmaw
+# name: variable: instance private mirrored auto wired
+# --
+@Autowired
+private ${1:Type} ${1:$(s-lower-camel-case yas-text)};$0

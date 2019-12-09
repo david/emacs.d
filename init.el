@@ -10,16 +10,33 @@
 (setq use-package-always-ensure t
       use-package-verbose t)
 
+(add-to-list 'load-path (expand-file-name (concat user-emacs-directory "/init.d")))
+
+(load-library "keyboard-navigation.init")
+(load-library "compilation.init")
+(load-library "helm.init")
+(load-library "prodigy.init")
+(load-library "clojure.init")
+
+(use-package display-line-numbers
+  :no-require t
+  :ensure nil
+  :hook ((prog-mode . display-line-numbers-mode)
+         (yaml-mode . display-line-numbers-mode)))
+
+(use-package display-fill-column-indicator
+  :no-require t
+  :ensure nil
+  :hook ((prog-mode . display-fill-column-indicator-mode)
+         (yaml-mode . display-fill-column-indicator-mode))
+  :config
+  (set-face-attribute
+   'fill-column-indicator nil :foreground "#3e6a44a85124"))
+
 (use-package exec-path-from-shell
   :config
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-env "CDPATH"))
-
-(use-package dabbrev
-  :no-require t
-  :ensure nil
-  :config
-  (setq dabbrev-upcase-means-case-search nil))
 
 (use-package site-environment
   :no-require t
@@ -27,13 +44,58 @@
   :config
   (setenv "PAGER" "/bin/cat"))
 
-(use-package site-compilation
+(use-package window-management
   :no-require t
   :ensure nil
   :config
-  (add-to-list 'same-window-regexps "^\\*compilation")
-  (add-hook 'compilation-filter-hook
-   (lambda () (ansi-color-apply-on-region (point-min) (point-max)))))
+  (setq frame-resize-pixelwise t)
+  (setq pop-up-frames 'graphic-only))
+
+(use-package composite
+  :no-require t
+  :ensure nil
+  :config
+  (dolist (hook `(ediff-mode-hook
+                  mu4e-headers-mode-hook
+                  package-menu-mode-hook))
+    (add-hook hook (lambda () (setq-local auto-composition-mode nil))))
+
+  ;; support ligatures, some toned down to prevent hang
+  (when (version<= "27.0" emacs-version)
+    (let ((alist
+           '((33 . ".\\(?:\\(==\\|[!=]\\)[!=]?\\)")
+             (35 . ".\\(?:\\(###?\\|_(\\|[(:=?[_{]\\)[#(:=?[_{]?\\)")
+             (36 . ".\\(?:\\(>\\)>?\\)")
+             (37 . ".\\(?:\\(%\\)%?\\)")
+             (38 . ".\\(?:\\(&\\)&?\\)")
+             (42 . ".\\(?:\\(\\*\\*\\|[*>]\\)[*>]?\\)")
+             ;; (42 . ".\\(?:\\(\\*\\*\\|[*/>]\\).?\\)")
+             (43 . ".\\(?:\\([>]\\)>?\\)")
+             ;; (43 . ".\\(?:\\(\\+\\+\\|[+>]\\).?\\)")
+             (45 . ".\\(?:\\(-[->]\\|<<\\|>>\\|[-<>|~]\\)[-<>|~]?\\)")
+             (46 . ".\\(?:\\(\\.[.<]\\|[-.=]\\)[-.<=]?\\)")
+             (47 . ".\\(?:\\(//\\|==\\|[=>]\\)[/=>]?\\)")
+             ;; (47 . ".\\(?:\\(//\\|==\\|[*/=>]\\).?\\)")
+             (48 . ".\\(?:\\(x[a-fA-F0-9]\\).?\\)")
+             (58 . ".\\(?:\\(::\\|[:<=>]\\)[:<=>]?\\)")
+             (59 . ".\\(?:\\(;\\);?\\)")
+             (60 . ".\\(?:\\(!--\\|\\$>\\|\\*>\\|\\+>\\|-[-<>|]\\|/>\\|<[-<=]\\|=[<>|]\\|==>?\\||>\\||||?\\|~[>~]\\|[$*+/:<=>|~-]\\)[$*+/:<=>|~-]?\\)")
+             (61 . ".\\(?:\\(!=\\|/=\\|:=\\|<<\\|=[=>]\\|>>\\|[=>]\\)[=<>]?\\)")
+             (62 . ".\\(?:\\(->\\|=>\\|>[-=>]\\|[-:=>]\\)[-:=>]?\\)")
+             (63 . ".\\(?:\\([.:=?]\\)[.:=?]?\\)")
+             (91 . ".\\(?:\\(|\\)|?\\)")
+             ;; (92 . ".\\(?:\\([\\n]\\)[\\]?\\)")
+             (94 . ".\\(?:\\(=\\)=?\\)")
+             (95 . ".\\(?:\\(|_\\|[_]\\)_?\\)")
+             (119 . ".\\(?:\\(ww\\)w?\\)")
+             (123 . ".\\(?:\\(|\\).?\\)")
+             (124 . ".\\(?:\\(->\\|=>\\||[-=>]\\||||*>\\|[]=>|}-]\\).?\\)")
+             (126 . ".\\(?:\\(~>\\|[-=>@~]\\).?\\)"))))
+      (dolist (char-regexp alist)
+        (set-char-table-range composition-function-table (car char-regexp)
+                              `([,(cdr char-regexp) 0 font-shape-gstring])))))
+
+  (global-auto-composition-mode))
 
 (use-package atom-one-dark-theme
   :config
@@ -47,6 +109,9 @@
   (setq kill-ring-max 1000)
   (setq require-final-newline t)
   (setq make-backup-files nil)
+  (setq auto-save-file-name-transforms
+        `((".*" ,temporary-file-directory t)))
+  (setq create-lockfiles nil)
   (setq scroll-conservatively 1000)
 
   (setq site-frame-settings '((menu-bar-lines . 0)
@@ -74,7 +139,7 @@
   (set-input-method nil)
 
   (set-face-attribute
-   'default nil :foreground "#cccccc" :height 100)
+   'default nil :family "Cascadia Code PL" :foreground "#cccccc" :height 95)
 
   (add-hook 'before-save-hook 'delete-trailing-whitespace))
 
@@ -82,15 +147,18 @@
   :no-require t
   :ensure nil
   :config
-  (defalias 'yes-or-no-p 'y-or-n-p))
+  (defalias 'yes-or-no-p 'y-or-n-p)
+  (add-hook 'minibuffer-setup-hook #'subword-mode))
 
 (use-package add-node-modules-path
   :commands add-node-modules-path
   :hook js2-mode)
 
+;;; Avy
+
 (use-package avy
   :bind (:map isearch-mode-map
-         ("C-'" . avy-isearch))
+              ("C-'" . avy-isearch))
   :config
   (setq avy-style 'at-full)
   (setq avy-timeout-seconds 0.5)
@@ -99,29 +167,22 @@
 
   (avy-setup-default))
 
+;;; Company
+
 (use-package company
-  :commands company-mode
+  :hook (after-init . global-company-mode)
   :config
-  (company-tng-configure-default))
+  (push 'company-yasnippet company-backends))
 
 (use-package company-lsp
-  :after (company yasnippet)
+  :after (company lsp-mode yasnippet)
   :config
+  (push 'company-lsp company-backends)
   (setq company-lsp-async t
-        company-lsp-cache-candidates t))
+        company-lsp-cache-candidates t
+        company-lsp-enable-snippet t))
 
-(use-package counsel
-  :after (ivy)
-  :config
-  (general-define-key
-   :states 'insert
-   :keymaps 'counsel-find-file-map
-   "C-l" 'counsel-up-directory)
-
-  (counsel-mode 1))
-
-(use-package counsel-projectile
-  :after (projectile))
+;;; Evil
 
 (use-package dap-mode
   :after lsp-mode
@@ -129,25 +190,16 @@
   (dap-mode t)
   (dap-ui-mode t))
 
-(use-package dimmer
-  :disabled
-  :config
-  (setq dimmer-fraction 0.5)
-  (dimmer-mode 1))
-
 (use-package docker
   :after (general))
 
 (use-package dockerfile-mode)
 
-(use-package elixir-mode)
-
 (use-package emacs-lisp
   :no-require t
   :ensure nil
   :hook ((emacs-lisp-mode . smartparens-mode)
-         (emacs-lisp-mode . eldoc-mode)
-         (emacs-lisp-mode . company-mode)))
+         (emacs-lisp-mode . eldoc-mode)))
 
 (use-package emmet-mode)
 
@@ -158,107 +210,6 @@
   (setq enh-ruby-add-encoding-comment-on-save nil)
   (setq enh-ruby-deep-indent-paren nil)
   (setq enh-ruby-deep-indent-construct nil))
-
-(use-package eshell
-  :after (xterm-color)
-  :config
-  (setq eshell-hist-ignoredups t)
-  (setq eshell-history-size 65456)
-  (setq eshell-prompt-regexp "^[0-9:]+ • .* • ")
-  (setq eshell-highlight-prompt nil)
-  (setq ior3k-projects-dir (concat (getenv "HOME") "/projects/"))
-
-  (defun ior3k-project-name (dir)
-    (when (string-match ior3k-projects-dir dir)
-      (car
-       (split-string (replace-regexp-in-string ior3k-projects-dir "" dir) "/"))))
-
-  (defun eshell-prompt-func ()
-    (let* ((dir (eshell/pwd))
-	   (time (format-time-string "%H:%M:%S" (current-time)))
-	   (project (ior3k-project-name dir))
-	   (child-dir (file-name-nondirectory dir))
-	   (no-project-dir (replace-regexp-in-string (getenv "HOME") "~" dir)))
-      (atom-one-dark-with-color-variables
-        (concat
-         time
-         " • "
-         (propertize
-          (if project project no-project-dir)
-          'face `(:foreground ,atom-one-dark-orange-1))
-         (if (and project (not (equal project child-dir)))
-             (concat " [" child-dir "]"))
-         (propertize
-          " •"
-          'face `(:foreground ,atom-one-dark-fg))
-         " "))))
-
-  (setq eshell-prompt-function 'eshell-prompt-func)
-
-  (defun eshell-mode-hook-func ()
-    (let ((path (mapconcat 'identity exec-path ":")))
-      (setq eshell-path-env path)
-      (setenv "PATH" path))
-
-    (setq xterm-color-preserve-properties t)
-
-    (add-to-list 'eshell-visual-commands "ssh"))
-
-  (add-hook 'eshell-mode-hook 'eshell-mode-hook-func)
-  (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
-
-  (setq eshell-output-filter-functions
-	(remove 'eshell-handle-ansi-color eshell-output-filter-functions)))
-
-(use-package evil
-  :init
-  (setq evil-want-integration nil)
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
-  :config
-  (setq-default evil-shift-width 2)
-
-  (evil-mode 1))
-
-(use-package evil-args
-  :after evil)
-
-(use-package evil-collection
-  :after evil
-  :init
-  (setq evil-collection-setup-minibuffer t)
-
-  (evil-collection-init)
-
-  (evil-collection-define-key 'insert 'ivy-minibuffer-map
-    (kbd "C-n") nil
-
-    (kbd "C-p") nil
-    (kbd "C-k") 'ivy-previous-line
-    (kbd "C-j") 'ivy-next-line
-    (kbd "C-d") 'ivy-immediate-done))
-
-(use-package evil-exchange
-  :config
-  (evil-exchange-install))
-
-(use-package evil-magit
-  :after (magit))
-
-(use-package evil-matchit
-  :after (evil)
-  :config
-  (global-evil-matchit-mode 1))
-
-(use-package evil-mc
-  :config
-  (global-evil-mc-mode 1))
-
-(use-package evil-string-inflection)
-
-(use-package evil-surround
-  :config
-  (global-evil-surround-mode 1))
 
 (use-package feature-mode
   :config
@@ -280,146 +231,6 @@
   :config
   (flycheck-jest-setup))
 
-(use-package general
-  :config
-  (general-create-definer ior3k-def
-    :states '(normal visual motion insert emacs)
-    :prefix "M-SPC")
-
-  (general-define-key
-   "C-w" 'backward-kill-word
-   "s-k" 'windmove-up
-   "s-j" 'windmove-down
-   "s-l" 'windmove-right
-   "s-h" 'windmove-left)
-
-  (general-define-key
-   :states 'normal
-
-   "SPC" 'evil-scroll-page-down
-   "+"   'universal-argument
-   "q"   'quit-window
-   "'"   'avy-goto-char-timer)
-
-  (defun ior3k-insert-semicolon-at-eol ()
-    (interactive)
-    (end-of-line)
-    (self-insert-command 1))
-
-  (defun ior3k-find-agenda-org-in-project ()
-    (interactive)
-    (find-file (expand-file-name "agenda.org" (projectile-project-root))))
-
-  (general-define-key
-   :states 'insert
-   :keymaps '(java-mode-map rjsx-mode-map)
-   ";" 'ior3k-insert-semicolon-at-eol)
-
-  (general-define-key
-   :states '(normal motion)
-
-   "L" 'evil-forward-arg
-   "H" 'evil-backward-arg)
-
-  (general-define-key
-   :keymaps 'evil-inner-text-objects-map
-
-   "a" 'evil-inner-arg)
-
-  (general-define-key
-   :keymaps 'evil-outer-text-objects-map
-
-   "a" 'evil-outer-arg)
-
-  (ior3k-def
-   "M-SPC" 'counsel-M-x
-
-   "c"  '(:ignore t :which-key "code")
-
-   "cS" '(:ignore t :which-key "snippets")
-   "cSn" '(yas-new-snippet :which-key "new snippet")
-   "cSS" '(yas-visit-snippet-file :which-key "find snippet file")
-   "cSi" '(yas-insert-snippet :which-key "insert snippet")
-
-   "ct" '(projectile-toggle-between-implementation-and-test
-          :which-key "toggle test file")
-   "cv" '(minitest-verify :which-key "run tests in file")
-
-   "d"  '(:ignore t :which-key "delete")
-   "dc" '(comment-dwim :which-key "comment dwim")
-   "db" '(kill-this-buffer :which-key "current buffer")
-   "de" '(save-buffers-kill-terminal :which-key "emacs")
-   "df" '(delete-current-file :which-key "delete current file")
-   "dm" '(delete-frame :which-key "current frame")
-   "dw" '(delete-window :which-key "this window")
-   "dW" '(delete-other-windows :which-key "other windows")
-
-   "e"   '(:ignore t :which-key "edit")
-   "ec"  '(:ignore t :which-key "conflict")
-   "eca" '(smerge-keep-current :which-key "keep all parts")
-   "ecc" '(smerge-keep-current :which-key "keep part under cursor")
-   "ecl" '(smerge-keep-lower :which-key "keep lower part")
-   "ecu" '(smerge-keep-upper :which-key "keep upper part")
-   "ef"  '(:ignore t :which-key "files")
-   "efr" '(er-rename-file-and-buffer :which-key "rename")
-   "ep"  '(package-list-packages :which-key "packages")
-
-   "g"   '(:ignore t :which-key "go to")
-   "ga"  '(ivy-switch-buffer :which-key "buffer")
-   "ge"  '(flycheck-next-error :which-key "next error")
-   "gc"  '(smerge-next :which-key "next conflict")
-   "gC"  '(smerge-prev :which-key "previous conflict")
-   "gE"  '(flycheck-previous-error :which-key "previous error")
-   "gi"  '(counsel-imenu :which-key "imenu")
-   "gf"  '(counsel-find-file :which-key "in current directory")
-   "gF"  '(counsel-projectile-find-file :which-key "in project")
-   "gg"  '(counsel-projectile :which-key "buffer or file")
-   "go"  '(:ignore t :which-key "ocurrences")
-   "gos" '(counsel-projectile-ag :which-key "free search")
-   "gv" '(find-alternate-file :which-key "alternate file")
-
-   "i"  '(:ignore t :which-key "insert")
-   "ic" '(comment-dwim :which-key "comment dwim")
-   "if" '(insert-file :which-key "file contents")
-   "ii" '(lsp-java-add-import :which-key "import")
-
-   "n"   '(:ignore t :which-key "new")
-   "nc"  '(evil-record-macro :which-key "macro")
-   "nm"  '(make-frame-command :which-key "frame")
-   "nw"  '(:ignore t :which-key "window")
-   "nwj" '(split-window-below :which-key "below")
-
-   "nwl" '(split-window-right :which-key "right")
-
-   "o"   '(:ignore t :which-key "open")
-   "oa"  '(ior3k-find-agenda-org-in-project :which-key "project agenda")
-   "oc"  '(projectile-rails-console :which-key "console")
-   "od"  '(dired :which-key "dired")
-   "oh"  '(:ignore t :which-key "help")
-   "ohf" '(counsel-describe-function :which-key "function")
-   "ohk" '(describe-key :which-key "key")
-   "ohm" '(describe-mode :which-key "mode")
-   "ohv" '(counsel-describe-variable :which-key "variable")
-   "op"  '(counsel-projectile-switch-project :which-key "project")
-   "oq"  '(sql-connect :which-key "database connection")
-   "or"  '(prodigy :which-key "servers")
-   "os"  '(projectile-run-eshell :which-key "shell in project")
-   "ov"  '(magit-status :which-key "git status")
-
-   "p"  '(:ignore t :which-key "projects")
-   "px" '(bpr-spawn :which-key "run async shell command")
-
-   "s"  '(:ignore t :which-key "save")
-   "sb" '(save-buffer :which-key "this buffer")
-   "sf" '(write-file :which-key "to file")
-   "ss" '(save-buffer :which-key "this buffer")
-
-   "x"  '(:ignore t :which-key "execute")
-   "xc" '(projectile-compile-project :which-key "compile")
-   "xC" '(recompile :which-key "recompile")
-   "xe" '(eval-last-sexp :which-key "eval last code block")
-   "xs" '(async-shell-command :which-key "async shell command")))
-
 (use-package highlight-indent-guides
   :hook ((prog-mode . highlight-indent-guides-mode)
          (yaml-mode . highlight-indent-guides-mode))
@@ -430,24 +241,19 @@
   :config
   (setq indium-chrome-executable "/usr/bin/google-chrome"))
 
-(use-package ivy
-  :config
-  (setq ivy-initial-inputs-alist nil)
-  (setq ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "")
-
-  (ivy-mode 1))
-
 (use-package java-mode
   :no-require t
   :ensure nil
   :after general
   :init
-  (ior3k-def
-   :keymaps 'java-mode-map
+  (general-define-key
+   :states 'insert
+   :keymaps '(java-mode-map)
+   ";" 'ior3k-insert-semicolon-at-eol)
+  (global-def
+    :keymaps 'java-mode-map
 
-   "ot" '(lsp-execute-code-action :which-key "code actions"))
+    "ci" '(lsp-java-add-import :which-key "code actions"))
 
   (defun ior3k-java-settings ()
     (setq c-basic-offset 4
@@ -459,13 +265,11 @@
     (c-set-offset 'arglist-intro '+)
     (c-set-offset 'arglist-close 0))
 
-  (add-hook 'java-mode-hook
-            (lambda ()
-              (setq-local company-backends (list 'company-lsp))))
   (add-hook 'java-mode-hook 'smartparens-mode)
   (add-hook 'java-mode-hook 'subword-mode)
   (add-hook 'java-mode-hook 'ior3k-java-settings)
-  (add-hook 'java-mode-hook 'auto-revert-mode))
+  (add-hook 'java-mode-hook 'auto-revert-mode)
+  (add-hook 'java-mode-hook (lambda () (aggressive-indent-mode 0))))
 
 (use-package js2-mode
   :commands js2-mode
@@ -478,13 +282,15 @@
   (setq js2-mode-show-strict-warnings nil)
   (setq js2-bounce-indent-p t))
 
-(use-package json-mode)
 
 (use-package lsp-mode
   :config
-  (setq lsp-inhibit-message t
+  (setq lsp-auto-guess-root t
         lsp-eldoc-render-all nil
+        lsp-enable-snippet t
+        lsp-enable-file-watchers nil
         lsp-highlight-symbol-at-point nil
+        lsp-inhibit-message t
         lsp-prefer-flymake nil))
 
 (use-package lsp-java
@@ -494,74 +300,38 @@
   (setq lsp-java-save-action-organize-imports nil)
 
   (add-hook 'java-mode-hook 'lsp)
-  (add-hook 'java-mode-hook 'flycheck-mode)
-  (add-hook 'java-mode-hook 'company-mode)
-  (add-hook 'java-mode-hook 'lsp-ui-mode))
+  (add-hook 'java-mode-hook 'flycheck-mode))
+  ;(add-hook 'java-mode-hook 'lsp-ui-mode))
+
+(use-package lsp-treemacs
+  :after lsp)
 
 (use-package lsp-ui
   :config
   (setq lsp-ui-doc-enable nil)
-  (setq lsp-ui-sideline-update-mode 'point))
+  (setq lsp-ui-doc-use-childframe nil)
+  (setq lsp-ui-sideline-enable nil))
+
+(use-package helm-lsp)
 
 (use-package magit
+  :after general
   :commands (magit-status)
   :config
+  (setq magit-commit-show-diff nil)
   (setq magit-log-arguments '("-n128" "--decorate"))
   (setq magit-rebase-arguments '("--autostash"))
   (setq magit-branch-arguments nil)
-  (add-to-list 'same-window-regexps "^magit"))
+
+  (add-to-list 'display-buffer-alist
+               '("^magit:.*"
+                 (display-buffer-reuse-window display-buffer-same-window)
+                 (reusable-frames . t))))
 
 (use-package prettier-js
   :after (js2-mode rjsx-mode)
   :hook ((js2-mode . prettier-js-mode)
          (rjsx-mode . prettier-js-mode)))
-
-(use-package prodigy
-  :config
-  (prodigy-define-tag
-    :name 'invoker
-    :command "invoker"
-    :args '("start"))
-
-  (prodigy-define-tag
-    :name 'docker
-    :ready-message ".*Attaching to .*")
-
-  (prodigy-define-tag
-    :name 'docker-compose
-    :command "docker-compose"
-    :args '("up"))
-
-  (prodigy-define-tag
-    :name 'rails-thin-server
-    :command "rails"
-    :args '("server" "thin")
-    :ready-message "Listening on .*, CTRL\\+C to stop")
-
-  (prodigy-define-tag
-    :name 'webpack-server
-    :command "webpack-dev-server"
-    :ready-message ": Compiled successfully")
-
-  (prodigy-define-tag
-    :name 'spring-boot-server
-    :command "mvn"
-    :args '("spring-boot:run")
-    :ready-message ".* Started .* in .* seconds (JVM running for .*)")
-
-  (prodigy-define-tag
-    :name 'yarn-server
-    :command "yarn"
-    :args '("start")
-    :ready-message "You can now view .* in the browser.")
-
-  (add-to-list 'same-window-regexps "^\\*prodigy")
-
-  (defun ior3k/prodigy-define-docker-compose-service (project cwd)
-    (prodigy-define-service
-      :name project
-      :cwd cwd
-      :tags '(docker docker-compose))))
 
 (use-package prog-mode
   :after (company)
@@ -570,24 +340,23 @@
   :hook
   ((prog-mode . smartparens-mode)
    (prog-mode . subword-mode)
-   (prog-mode . company-mode)
    (prog-mode . flycheck-mode)))
 
 (use-package projectile
   :config
-  (setq projectile-completion-system 'ivy)
+  (setq projectile-completion-system 'helm)
 
   (projectile-mode 1))
 
 (use-package projectile-rails
   :after projectile
   :config
-  (add-to-list 'same-window-regexps "^\\*rails")
   (projectile-rails-global-mode 1))
 
-(use-package pug-mode
+(use-package helm-projectile
+  :after (helm projectile)
   :config
-  (setq pug-tab-width 2))
+  (helm-projectile-on))
 
 (use-package rainbow-delimiters
   :hook ((prog-mode . rainbow-delimiters-mode)))
@@ -595,6 +364,23 @@
 (use-package rainbow-mode
   :after rjsx-mode
   :hook rjsx-mode)
+
+(use-package reason-mode
+  :after lsp-mode
+  :config
+  (setq refmt-command 'npm)
+
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection
+                                     "/home/david/.emacs.d/rls-linux/reason-language-server")
+                    :major-modes '(reason-mode)
+                    :notification-handlers (ht ("client/registerCapability" 'ignore))
+                    :priority 1
+                    :server-id 'reason-ls))
+
+  (add-hook 'reason-mode-hook (lambda () (add-hook 'before-save-hook #'refmt-before-save)))
+  (add-hook 'reason-mode-hook #'lsp)
+  (add-hook 'reason-mode-hook (lambda () (sp-pair "`" nil :actions :rem))))
 
 (use-package rjsx-mode
   :mode "\\.js\\'")
@@ -608,6 +394,7 @@
   (setq sh-basic-offset 2))
 
 (use-package smartparens
+  :after general
   :init (require 'smartparens-config)
   :hook ((smartparens-mode . sp-use-smartparens-bindings)
          (enh-ruby-mode . (lambda () (require 'smartparens-ruby)))
@@ -616,9 +403,14 @@
   (setq sp-escape-quotes-after-insert nil)
   (setq sp-escape-wrapped-region nil)
 
-  (show-smartparens-global-mode 1))
+  (general-define-key
+   :states '(insert normal motion)
+   :keymaps 'smartparens-mode-map
 
-(use-package stylus-mode)
+   "C-l" 'sp-forward-slurp-sexp
+   "C-h" 'sp-forward-barf-sexp)
+
+  (show-smartparens-global-mode 1))
 
 (use-package telephone-line
   :config
@@ -655,13 +447,6 @@
 
 (use-package yasnippet
   :config
-  (defun ior3k/downcase-first-char (string)
-    "Capitalize only the first character of the input STRING."
-    (when (and string (> (length string) 0))
-      (let ((first-char (substring string nil 1))
-            (rest-str   (substring string 1)))
-        (concat (downcase first-char) rest-str))))
-
   (yas-global-mode 1))
 
 (use-package projects
@@ -675,6 +460,85 @@
   :ensure nil
   :config
   (add-to-list 'same-window-regexps "^\\*SQL"))
+
+;;; Eshell
+
+(use-package eshell
+  :after (xterm-color)
+  :config
+  (setq eshell-hist-ignoredups t)
+  (setq eshell-history-size 65456)
+  (setq eshell-prompt-regexp "^[0-9:]+ • .* • ")
+  (setq eshell-highlight-prompt nil)
+  (setq ior3k-projects-dir (concat (getenv "HOME") "/projects/"))
+
+  (defun ior3k-project-name (dir)
+    (when (string-match ior3k-projects-dir dir)
+      (car
+       (split-string (replace-regexp-in-string ior3k-projects-dir "" dir) "/"))))
+
+  (defun eshell-prompt-func ()
+    (let* ((dir (eshell/pwd))
+	   (time (format-time-string "%H:%M:%S" (current-time)))
+	   (project (ior3k-project-name dir))
+	   (child-dir (file-name-nondirectory dir))
+	   (no-project-dir (replace-regexp-in-string (getenv "HOME") "~" dir)))
+      (atom-one-dark-with-color-variables
+        (concat
+         time
+         " • "
+         (propertize
+          (if project project no-project-dir)
+          'face `(:foreground ,atom-one-dark-orange-1))
+         (if (and project (not (equal project child-dir)))
+             (concat " [" child-dir "]"))
+         (propertize
+          " •"
+          'face `(:foreground ,atom-one-dark-fg))
+         " "))))
+
+  (add-hook 'eshell-mode-hook
+            (lambda()
+              (setenv "TERM" "xterm-256color")
+              (add-to-list 'eshell-visual-commands "ssh")))
+
+  (setq eshell-prompt-function 'eshell-prompt-func)
+
+  (add-to-list 'display-buffer-alist
+               '("^\\*eshell.*"
+                 (display-buffer-reuse-window display-buffer-same-window)
+                 (reusable-frames . t)))
+
+  (add-hook 'eshell-before-prompt-hook
+            (lambda ()
+              (setq xterm-color-preserve-properties t)))
+
+  (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
+
+  (setq eshell-output-filter-functions
+	(remove 'eshell-handle-ansi-color eshell-output-filter-functions)))
+
+;;; Elixir
+
+(use-package elixir-mode
+  :after alchemist
+  :after (lsp-mode)
+  :hook (elixir-mode . lsp)
+  :init
+  (add-to-list 'exec-path "/home/david/.emacs.d/elixir-ls/server")
+  :config
+  (add-hook 'elixir-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook 'elixir-format nil t)
+              (global-def
+                :keymap 'local
+                "pc" '(alchemist-iex-project-run :which-key "run iex")))))
+
+(use-package alchemist)
+
+(use-package aggressive-indent
+  :config
+  (global-aggressive-indent-mode 1))
 
 (defun delete-current-file ()
   "Removes file connected to current buffer and kills buffer."
@@ -708,11 +572,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   (quote
-    (elixir-mode terraform-mode docker dockerfile-mode rubocop evil-mc indium flycheck yasnippet yaml-mode xterm-color which-key wgrep use-package telephone-line stylus-mode smartparens rjsx-mode rainbow-mode rainbow-delimiters pug-mode projectile-rails prodigy prettier-js lsp-ui lsp-java json-mode highlight-indent-guides general feature-mode exec-path-from-shell evil-surround evil-string-inflection evil-matchit evil-magit evil-exchange evil-collection evil-args enh-ruby-mode emmet-mode dimmer dap-mode counsel-projectile company-lsp avy atom-one-dark-theme add-node-modules-path))))
+   '(helm-rg composite cider clojure-mode aggressive-indent aggressive-indent-mode helm-ag alchemist helm-lsp helm-projectile helm-ls-git helm lsp-treemacs elixir-mode elixir-ls elixir-lsp flycheck-elixir reason-mode terraform-mode docker dockerfile-mode rubocop evil-mc indium flycheck yasnippet yaml-mode xterm-color which-key wgrep use-package telephone-line smartparens rjsx-mode rainbow-mode rainbow-delimiters projectile-rails prodigy prettier-js lsp-ui lsp-java json-mode highlight-indent-guides general feature-mode exec-path-from-shell evil-surround evil-matchit evil-magit evil-exchange evil-collection evil-args enh-ruby-mode emmet-mode dap-mode company-lsp avy atom-one-dark-theme add-node-modules-path)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(server-start)
