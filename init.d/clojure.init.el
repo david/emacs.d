@@ -1,3 +1,3 @@
 (use-package clojure-mode
   :config
-  (setq fill-column 100))
+  (put-clojure-indent 'match 1))
