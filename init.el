@@ -122,7 +122,7 @@
   (setq initial-frame-alist site-frame-settings)
 
   (setq-default indent-tabs-mode nil)
-  (setq-default fill-column 80)
+  (setq-default fill-column 100)
   (setq-default line-spacing 2)
 
   (fringe-mode '(12 . 12))
