@@ -16,6 +16,7 @@
 (load-library "compilation.init")
 (load-library "helm.init")
 (load-library "prodigy.init")
+(load-library "programming.init")
 (load-library "clojure.init")
 
 (use-package display-line-numbers
@@ -268,8 +269,7 @@
   (add-hook 'java-mode-hook 'smartparens-mode)
   (add-hook 'java-mode-hook 'subword-mode)
   (add-hook 'java-mode-hook 'ior3k-java-settings)
-  (add-hook 'java-mode-hook 'auto-revert-mode)
-  (add-hook 'java-mode-hook (lambda () (aggressive-indent-mode 0))))
+  (add-hook 'java-mode-hook 'auto-revert-mode))
 
 (use-package js2-mode
   :commands js2-mode
@@ -282,17 +282,6 @@
   (setq js2-mode-show-strict-warnings nil)
   (setq js2-bounce-indent-p t))
 
-
-(use-package lsp-mode
-  :config
-  (setq lsp-auto-guess-root t
-        lsp-eldoc-render-all nil
-        lsp-enable-snippet t
-        lsp-enable-file-watchers nil
-        lsp-highlight-symbol-at-point nil
-        lsp-inhibit-message t
-        lsp-prefer-flymake nil))
-
 (use-package lsp-java
   :after lsp
   :config
@@ -302,17 +291,6 @@
   (add-hook 'java-mode-hook 'lsp)
   (add-hook 'java-mode-hook 'flycheck-mode))
   ;(add-hook 'java-mode-hook 'lsp-ui-mode))
-
-(use-package lsp-treemacs
-  :after lsp)
-
-(use-package lsp-ui
-  :config
-  (setq lsp-ui-doc-enable nil)
-  (setq lsp-ui-doc-use-childframe nil)
-  (setq lsp-ui-sideline-enable nil))
-
-(use-package helm-lsp)
 
 (use-package magit
   :after general
@@ -333,15 +311,6 @@
   :hook ((js2-mode . prettier-js-mode)
          (rjsx-mode . prettier-js-mode)))
 
-(use-package prog-mode
-  :after (company)
-  :ensure nil
-  :no-require t
-  :hook
-  ((prog-mode . smartparens-mode)
-   (prog-mode . subword-mode)
-   (prog-mode . flycheck-mode)))
-
 (use-package projectile
   :config
   (setq projectile-completion-system 'helm)
@@ -357,9 +326,6 @@
   :after (helm projectile)
   :config
   (helm-projectile-on))
-
-(use-package rainbow-delimiters
-  :hook ((prog-mode . rainbow-delimiters-mode)))
 
 (use-package rainbow-mode
   :after rjsx-mode
@@ -535,10 +501,6 @@
                 "pc" '(alchemist-iex-project-run :which-key "run iex")))))
 
 (use-package alchemist)
-
-(use-package aggressive-indent
-  :config
-  (global-aggressive-indent-mode 1))
 
 (defun delete-current-file ()
   "Removes file connected to current buffer and kills buffer."
