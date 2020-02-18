@@ -13,11 +13,21 @@
 (add-to-list 'load-path (expand-file-name (concat user-emacs-directory "/init.d")))
 
 (load-library "keyboard-navigation.init")
+(load-library "shell.init")
 (load-library "compilation.init")
 (load-library "helm.init")
+(load-library "version-control.init")
+(load-library "projectile.init")
 (load-library "prodigy.init")
 (load-library "programming.init")
+(load-library "web.init")
+(load-library "lisp.init")
 (load-library "clojure.init")
+(load-library "docker.init")
+(load-library "coffee.init")
+(load-library "ruby.init")
+(load-library "sql.init")
+(load-library "typescript.init")
 
 (use-package display-line-numbers
   :no-require t
@@ -49,8 +59,7 @@
   :no-require t
   :ensure nil
   :config
-  (setq frame-resize-pixelwise t)
-  (setq pop-up-frames 'graphic-only))
+  (setq frame-resize-pixelwise t))
 
 (use-package composite
   :no-require t
@@ -126,7 +135,7 @@
   (setq-default fill-column 100)
   (setq-default line-spacing 2)
 
-  (fringe-mode '(12 . 12))
+  (fringe-mode '(12 . 20))
   (global-hl-line-mode 1)
   (blink-cursor-mode -1)
   (show-paren-mode 1)
@@ -191,11 +200,6 @@
   (dap-mode t)
   (dap-ui-mode t))
 
-(use-package docker
-  :after (general))
-
-(use-package dockerfile-mode)
-
 (use-package emacs-lisp
   :no-require t
   :ensure nil
@@ -203,14 +207,6 @@
          (emacs-lisp-mode . eldoc-mode)))
 
 (use-package emmet-mode)
-
-(use-package enh-ruby-mode
-  :after (smartparens)
-  :mode "\\.rb\\'"
-  :config
-  (setq enh-ruby-add-encoding-comment-on-save nil)
-  (setq enh-ruby-deep-indent-paren nil)
-  (setq enh-ruby-deep-indent-construct nil))
 
 (use-package feature-mode
   :config
@@ -290,42 +286,12 @@
 
   (add-hook 'java-mode-hook 'lsp)
   (add-hook 'java-mode-hook 'flycheck-mode))
-  ;(add-hook 'java-mode-hook 'lsp-ui-mode))
-
-(use-package magit
-  :after general
-  :commands (magit-status)
-  :config
-  (setq magit-commit-show-diff nil)
-  (setq magit-log-arguments '("-n128" "--decorate"))
-  (setq magit-rebase-arguments '("--autostash"))
-  (setq magit-branch-arguments nil)
-
-  (add-to-list 'display-buffer-alist
-               '("^magit:.*"
-                 (display-buffer-reuse-window display-buffer-same-window)
-                 (reusable-frames . t))))
+                                        ;(add-hook 'java-mode-hook 'lsp-ui-mode))
 
 (use-package prettier-js
   :after (js2-mode rjsx-mode)
   :hook ((js2-mode . prettier-js-mode)
          (rjsx-mode . prettier-js-mode)))
-
-(use-package projectile
-  :config
-  (setq projectile-completion-system 'helm)
-
-  (projectile-mode 1))
-
-(use-package projectile-rails
-  :after projectile
-  :config
-  (projectile-rails-global-mode 1))
-
-(use-package helm-projectile
-  :after (helm projectile)
-  :config
-  (helm-projectile-on))
 
 (use-package rainbow-mode
   :after rjsx-mode
@@ -363,7 +329,6 @@
   :after general
   :init (require 'smartparens-config)
   :hook ((smartparens-mode . sp-use-smartparens-bindings)
-         (enh-ruby-mode . (lambda () (require 'smartparens-ruby)))
          (rjsx-mode . (lambda () (require 'smartparens-javascript))))
   :config
   (setq sp-escape-quotes-after-insert nil)
@@ -421,69 +386,6 @@
   :config
   (load-file "~/.emacs.d/projects.el"))
 
-(use-package sql
-  :no-require t
-  :ensure nil
-  :config
-  (add-to-list 'same-window-regexps "^\\*SQL"))
-
-;;; Eshell
-
-(use-package eshell
-  :after (xterm-color)
-  :config
-  (setq eshell-hist-ignoredups t)
-  (setq eshell-history-size 65456)
-  (setq eshell-prompt-regexp "^[0-9:]+ • .* • ")
-  (setq eshell-highlight-prompt nil)
-  (setq ior3k-projects-dir (concat (getenv "HOME") "/projects/"))
-
-  (defun ior3k-project-name (dir)
-    (when (string-match ior3k-projects-dir dir)
-      (car
-       (split-string (replace-regexp-in-string ior3k-projects-dir "" dir) "/"))))
-
-  (defun eshell-prompt-func ()
-    (let* ((dir (eshell/pwd))
-	   (time (format-time-string "%H:%M:%S" (current-time)))
-	   (project (ior3k-project-name dir))
-	   (child-dir (file-name-nondirectory dir))
-	   (no-project-dir (replace-regexp-in-string (getenv "HOME") "~" dir)))
-      (atom-one-dark-with-color-variables
-        (concat
-         time
-         " • "
-         (propertize
-          (if project project no-project-dir)
-          'face `(:foreground ,atom-one-dark-orange-1))
-         (if (and project (not (equal project child-dir)))
-             (concat " [" child-dir "]"))
-         (propertize
-          " •"
-          'face `(:foreground ,atom-one-dark-fg))
-         " "))))
-
-  (add-hook 'eshell-mode-hook
-            (lambda()
-              (setenv "TERM" "xterm-256color")
-              (add-to-list 'eshell-visual-commands "ssh")))
-
-  (setq eshell-prompt-function 'eshell-prompt-func)
-
-  (add-to-list 'display-buffer-alist
-               '("^\\*eshell.*"
-                 (display-buffer-reuse-window display-buffer-same-window)
-                 (reusable-frames . t)))
-
-  (add-hook 'eshell-before-prompt-hook
-            (lambda ()
-              (setq xterm-color-preserve-properties t)))
-
-  (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
-
-  (setq eshell-output-filter-functions
-	(remove 'eshell-handle-ansi-color eshell-output-filter-functions)))
-
 ;;; Elixir
 
 (use-package elixir-mode
@@ -534,7 +436,17 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(helm-rg composite cider clojure-mode aggressive-indent aggressive-indent-mode helm-ag alchemist helm-lsp helm-projectile helm-ls-git helm lsp-treemacs elixir-mode elixir-ls elixir-lsp flycheck-elixir reason-mode terraform-mode docker dockerfile-mode rubocop evil-mc indium flycheck yasnippet yaml-mode xterm-color which-key wgrep use-package telephone-line smartparens rjsx-mode rainbow-mode rainbow-delimiters projectile-rails prodigy prettier-js lsp-ui lsp-java json-mode highlight-indent-guides general feature-mode exec-path-from-shell evil-surround evil-matchit evil-magit evil-exchange evil-collection evil-args enh-ruby-mode emmet-mode dap-mode company-lsp avy atom-one-dark-theme add-node-modules-path)))
+   '(git-gutter-fringe git-gutter tide typescript-mode helm-cider clj-refactor cider-eval-sexp-fu wgrep-helm web-mode coffee-mode sql-indent lispyville composite cider clojure-mode aggressive-indent aggressive-indent-mode alchemist helm-lsp helm-projectile helm-ls-git helm lsp-treemacs elixir-mode elixir-ls elixir-lsp flycheck-elixir reason-mode terraform-mode docker dockerfile-mode rubocop evil-mc indium flycheck yasnippet yaml-mode xterm-color which-key wgrep use-package telephone-line smartparens rjsx-mode rainbow-mode rainbow-delimiters projectile-rails prodigy prettier-js lsp-ui lsp-java json-mode highlight-indent-guides general feature-mode exec-path-from-shell evil-surround evil-matchit evil-magit evil-exchange evil-collection evil-args enh-ruby-mode emmet-mode dap-mode company-lsp avy atom-one-dark-theme add-node-modules-path))
+ '(safe-local-variable-values
+   '((eval setq sql-mysql-program
+           (string-trim-right
+            (shell-command-to-string "asdf which mysql")))
+     (eval
+      (setq sql-mysql-program
+            (string-trim-right
+             (shell-command-to-string "asdf which mysql"))))
+     (cider-shadow-default-options . ":app")
+     (cider-default-cljs-repl . shadow))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

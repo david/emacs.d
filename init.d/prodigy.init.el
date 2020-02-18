@@ -1,14 +1,10 @@
 (use-package prodigy
   :after (general)
   :config
-  (prodigy-define-tag
-    :name 'spring-boot-server
-    :command "mvn")
-
-  (prodigy-define-tag
-    :name 'invoker
-    :command "invoker"
-    :args '("start"))
+  (add-to-list 'display-buffer-alist
+               '("^\\*prodigy.*\\*$"
+                 (display-buffer-reuse-window display-buffer-same-window)
+                 (reusable-frames . t)))
 
   (prodigy-define-tag
     :name 'postgres
@@ -22,30 +18,21 @@
     :ready-message ".*Access.*\\.Endpoint at http.*")
 
   (prodigy-define-tag
-    :name 'docker
-    :ready-message ".*Attaching to .*")
-
-  (prodigy-define-tag
-    :name 'docker-compose
-    :command "docker-compose"
-    :args '("up"))
-
-  (prodigy-define-tag
     :name 'rails-thin-server
     :command "rails"
     :args '("server" "thin")
     :ready-message "Listening on .*, CTRL\\+C to stop")
 
   (prodigy-define-tag
+    :name 'rails-server
+    :command "rails"
+    :args '("server" "--port" "4000")
+    :ready-message ".*Use CTRL\\+C to stop")
+
+  (prodigy-define-tag
     :name 'webpack-server
     :command "webpack-dev-server"
     :ready-message ": Compiled successfully")
-
-  (prodigy-define-tag
-    :name 'spring-boot-server
-    :command "mvn"
-    :args '("spring-boot:run")
-    :ready-message ".* Started .* in .* seconds (JVM running for .*)")
 
   (prodigy-define-tag
     :name 'yarn-server
@@ -54,23 +41,27 @@
     :ready-message "You can now view .* in the browser.")
 
   (prodigy-define-tag
-    :name 'shadow-cljs
-    :command "yarn"
-    :args '("shadow-cljs" "watch" "app")
-    :ready-message ".*Build completed\\. .*")
+    :name 'mariadb
+    :command "mysqld_safe"
+    :ready-message ".*Starting mysqld daemon with databases from.*")
+
+  (prodigy-define-tag
+    :name 'elasticsearch
+    :command "elasticsearch"
+    :ready-message ".*Starting mysqld daemon with databases from.*")
+
+  (prodigy-define-tag
+    :name 'fakes3
+    :command "bundle"
+    :args '("exec" "fakes3" "-r" ".local-s3/" "-p" "4567" "-H" "fakes3")
+    :ready-message ".*WEBrick::HTTPServer#start.*")
 
   (general-define-key
    :states '(normal)
    :keymaps 'prodigy-view-mode-map
-   :prefix "p"
+   :prefix "g"
 
    "c" 'prodigy-view-clear-buffer
    "r" 'prodigy-restart
    "S" 'prodigy-stop
-   "s" 'prodigy-start)
-
-  (defun ior3k/prodigy-define-docker-compose-service (project cwd)
-    (prodigy-define-service
-      :name project
-      :cwd cwd
-      :tags '(docker docker-compose))))
+   "s" 'prodigy-start))

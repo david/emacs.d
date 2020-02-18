@@ -1,5 +1,5 @@
 (use-package aggressive-indent
-  :hook ((prog-mode . aggressive-indent-mode)))
+  :hook ((clojure-mode . aggressive-indent-mode)))
 
 (use-package lsp-mode
   :config

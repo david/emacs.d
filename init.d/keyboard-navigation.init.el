@@ -33,21 +33,6 @@
   :config
   (evil-exchange-install))
 
-(use-package evil-magit
-  :after (evil general magit)
-  :config
-
-  (general-define-key
-   :states '(normal visual motion emacs)
-
-   "C-w" 'delete-frame)
-
-  (general-define-key
-   :states '(normal visual motion)
-   :keymaps '(magit-mode-map magit-revision-mode-map)
-
-   "C-w" 'delete-frame))
-
 (use-package evil-matchit
   :after (evil)
   :config
@@ -64,6 +49,7 @@
 (use-package general
   :after (evil evil-collection helm)
   :config
+
   (general-create-definer ior3k-def
     :states '(emacs insert motion normal visual)
     :prefix "M-SPC")
@@ -84,8 +70,13 @@
 
    "SPC" 'evil-scroll-page-down
    "+"   'universal-argument
-   "q"   'quit-window
-   "'"   'avy-goto-char-timer)
+   "q"   'previous-buffer
+   "Q"   'delete-other-windows)
+
+  (general-define-key
+   :states '(normal motion visual)
+   "f" 'avy-goto-char-in-line
+   "'" 'avy-goto-char-timer)
 
   (defun ior3k-insert-semicolon-at-eol ()
     (interactive)
@@ -104,6 +95,11 @@
   (general-define-key
    :states '(emacs insert motion normal visual)
    :keymaps '(completion-list-mode-map fundamental-mode-map)
+
+   "C-w" 'delete-frame)
+
+  (general-define-key
+   :states '(normal visual motion emacs)
 
    "C-w" 'delete-frame)
 
@@ -138,7 +134,7 @@
     "ch"  '(lsp-describe-thing-at-point :which-key "show symbol documentation")
     "cr"  '(lsp-rename :which-key "rename symbol")
     "cwr" '(lsp-workspace-restart :which-key "restart")
-    "cx"  '(eval-last-sexp :which-key "eval last expression")
+    "cx"  '(:ignore t :which-key "evals")
     "cy"  '(helm-imenu :which-key "symbol in file"))
 
   (global-def
@@ -150,7 +146,8 @@
     "es" '(prodigy :which-key "servers")
     "eSn" '(yas-new-snippet :which-key "new snippet")
     "eSS" '(yas-visit-snippet-file :which-key "find snippet file")
-    "eSi" '(yas-insert-snippet :which-key "insert snippet"))
+    "eSi" '(yas-insert-snippet :which-key "insert snippet")
+    "ex"  '(eval-last-sexp :which-key "eval last expression"))
 
   (global-def
     "f"  '(:ignore t :which-key "file")
@@ -160,7 +157,8 @@
     "fi" '(insert-file :which-key "insert contents")
     "fp" '(helm-browse-project :which-key "open in project")
     "fr" '(er-rename-file-and-buffer :which-key "rename")
-    "fs" '(write-file :which-key "save as"))
+    "fs" '(write-file :which-key "save as")
+    "fw" '(pwd :which-key "pwd"))
 
   (global-def
     "h"  '(:ignore t :which-key "help")
@@ -179,24 +177,16 @@
     "qq" '(sql-connect :which-key "connect"))
 
   (global-def
+    "r" '(:ignore t :which-key "repl"))
+
+  (global-def
     "u"  '(:ignore t :which-key "buffer")
     "ud" '(evil-delete-buffer :which-key "delete current buffer")
-    "up" '(helm-browse-project :which-key "open in project")
+    "uo" '(read-only-mode :which-key "toggle read only mode")
+    "up" '(helm-projectile :which-key "open in project")
     "us" '(save-buffer :which-key "save this buffer")
     "uS" '(write-file :which-key "write to file")
     "uu" '(helm-mini :which-key "switch buffer"))
-
-  (global-def
-    "v"   '(:ignore t :which-key "version control")
-    "va"  '(smerge-keep-current :which-key "keep all parts")
-    "vb"  '(magit-blame-addition :which-key "blame")
-    "vlf" '(magit-log-buffer-file :which-key "commits related to file")
-    "vsn" '(smerge-next :which-key "go to next conflict")
-    "vsN" '(smerge-prev :which-key "go to previous conflict")
-    "vsj" '(smerge-keep-lower :which-key "keep lower part")
-    "vsk" '(smerge-keep-upper :which-key "keep upper part")
-    "vsl" '(smerge-keep-current :which-key "keep part under cursor")
-    "vv"  '(projectile-vc :which-key "git status"))
 
   (global-def
     "w"  '(:ignore t :which-key "window")
@@ -206,10 +196,10 @@
     "wl" '(split-window-right :which-key "open right"))
 
   (global-def
-    "x" '(:ignore x :which-key "execute")
-    "xh" '(projectile-run-eshell :which-key "shell in project")
-    "xp" '(projectile-run-async-shell-command-in-root :which-key "command in root")
-    "xs" '(helm-projectile-rg :which-key "search"))
+    "p" '(:ignore t :which-key "execute")
+    "px" '(projectile-run-async-shell-command-in-root :which-key "command in root")
+    "ph" '(projectile-run-eshell :which-key "shell in project")
+    "ps" '(helm-projectile-ack :which-key "search"))
 
   (global-def
     "M-SPC" 'helm-M-x))

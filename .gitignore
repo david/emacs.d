@@ -7,3 +7,13 @@
 /eclipse.jdt.ls/
 /workspace/
 /projectile.cache
+/.cache
+/session.*
+/rls-linux/
+/.dap-breakpoints
+/abbrev_defs
+/elixir-ls/
+/tramp
+/.lsp-session-v1
+/.jest-reports/
+/helm-adaptive-history

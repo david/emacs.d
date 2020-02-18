@@ -1,0 +1,7 @@
+# key: rc
+# name: react component
+# --
+[@react.component]
+let make = (${args}) => {
+  $0
+}
