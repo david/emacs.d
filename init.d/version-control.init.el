@@ -14,7 +14,11 @@
     "vck" '(smerge-keep-upper :which-key "keep upper part")
     "vcl" '(smerge-keep-current :which-key "keep part under cursor")
     "vlf" '(magit-log-buffer-file :which-key "commits related to file")
-    "vv"  '(projectile-vc :which-key "git status")))
+    "vv"  '(projectile-vc :which-key "git status")
+    "vu"  '(:ignore t :which-key "in buffer")
+    "vun" '(git-gutter:next-hunk :which-key "next hunk")
+    "vup" '(git-gutter:previous-hunk :which-key "previous hunk")
+    "vus" '(git-gutter:stage-hunk :which-key "stage hunk")))
 
 (use-package magit
   :after general
