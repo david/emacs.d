@@ -15,6 +15,13 @@
 
   (add-hook 'projectile-switch-project-hook 'ior3k/rails-project-add-keybindings))
 
+(use-package inf-ruby
+  :config
+  (add-to-list 'display-buffer-alist
+               '("^\\*rails"
+                 (display-buffer-reuse-window display-buffer-same-window)
+                 (reusable-frames . t))))
+
 (use-package web-mode-ruby
   :after (web-mode)
   :no-require t
