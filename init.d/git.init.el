@@ -1,4 +1,4 @@
-(use-package version-control-keybindings
+(use-package git-keybindings
   :after general
   :ensure nil
   :no-require t

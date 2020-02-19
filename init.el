@@ -16,7 +16,7 @@
 (load-library "shell.init")
 (load-library "compilation.init")
 (load-library "helm.init")
-(load-library "version-control.init")
+(load-library "git.init")
 (load-library "projectile.init")
 (load-library "prodigy.init")
 (load-library "programming.init")
