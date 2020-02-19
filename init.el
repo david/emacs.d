@@ -139,7 +139,6 @@
   (fringe-mode '(12 . 12))
   (global-hl-line-mode 1)
   (blink-cursor-mode -1)
-  (show-paren-mode 1)
 
   (set-terminal-coding-system 'utf-8)
   (set-keyboard-coding-system 'utf-8)
