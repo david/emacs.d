@@ -135,7 +135,7 @@
   (setq-default fill-column 100)
   (setq-default line-spacing 2)
 
-  (fringe-mode '(12 . 20))
+  (fringe-mode '(12 . 12))
   (global-hl-line-mode 1)
   (blink-cursor-mode -1)
   (show-paren-mode 1)
