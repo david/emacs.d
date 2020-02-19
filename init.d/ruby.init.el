@@ -39,7 +39,7 @@
      (sp-pair "%" "%"))))
 
 (defun ior3k/rails-project-add-keybindings ()
-  (if (equal "rails-test" (projectile-project-type))
+  (if (equal 'rails-test (projectile-project-type))
       (global-def
         "rs" '(:ignore t :which-key "server")
         "rss" '(projectile-rails-console :which-key "start"))))
