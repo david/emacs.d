@@ -1,19 +1,8 @@
-(use-package enh-ruby-mode
-  :after (projectile smartparens)
-  :mode (("\\.rb\\'" . enh-ruby-mode)
-         ("\\.rake\\'" . enh-ruby-mode))
-  :config
-  (setq enh-ruby-add-encoding-comment-on-save nil)
-  (setq enh-ruby-deep-indent-paren nil)
-  (setq enh-ruby-deep-indent-construct nil)
-
-  (add-hook
-   'enh-ruby-mode-hook
-   (lambda ()
-     (require 'smartparens-ruby)
-     (sp-pair "<" ">" :actions :rem)))
-
-  (add-hook 'projectile-switch-project-hook 'ior3k/rails-project-add-keybindings))
+(use-package ruby-mode
+  :no-require t
+  :ensure nil
+  :after lsp
+  :hook ((ruby-mode . lsp)))
 
 (use-package inf-ruby
   :config
