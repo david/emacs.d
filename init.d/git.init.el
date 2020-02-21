@@ -18,6 +18,7 @@
     "vu"  '(:ignore t :which-key "in buffer")
     "vun" '(git-gutter:next-hunk :which-key "next hunk")
     "vup" '(git-gutter:previous-hunk :which-key "previous hunk")
+    "vur" '(git-gutter:revert-hunk :which-key "revert hunk")
     "vus" '(git-gutter:stage-hunk :which-key "stage hunk")))
 
 (use-package magit
