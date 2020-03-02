@@ -138,16 +138,21 @@
     "cy"  '(helm-imenu :which-key "symbol in file"))
 
   (global-def
-    "e"  '(:ignore t :which-key "editor")
-    "ed" '(dired :which-key "dired")
-    "ek" '(package-list-packages :which-key "packages")
-    "ep" '(projectile-switch-project :which-key "switch")
-    "eq" '(save-buffers-kill-terminal :which-key "quit")
-    "es" '(prodigy :which-key "servers")
+    "e"  '(:ignore t :which-key "edit")
+    "es" '(helm-projectile-ack :which-key "search in project")
+    "eS"  '(:ignore t :which-key "snippets")
     "eSn" '(yas-new-snippet :which-key "new snippet")
     "eSS" '(yas-visit-snippet-file :which-key "find snippet file")
-    "eSi" '(yas-insert-snippet :which-key "insert snippet")
-    "ex"  '(eval-last-sexp :which-key "eval last expression"))
+    "eSi" '(yas-insert-snippet :which-key "insert snippet"))
+
+  (global-def
+    "E"  '(:ignore t :which-key "editor")
+    "Ed" '(dired :which-key "dired")
+    "Ek" '(package-list-packages :which-key "packages")
+    "Ep" '(projectile-switch-project :which-key "switch")
+    "Eq" '(save-buffers-kill-terminal :which-key "quit")
+    "Es" '(prodigy :which-key "servers")
+    "Ex"  '(eval-last-sexp :which-key "eval last expression"))
 
   (global-def
     "f"  '(:ignore t :which-key "file")
@@ -181,12 +186,12 @@
 
   (global-def
     "u"  '(:ignore t :which-key "buffer")
+    "ua" '(helm-mini :which-key "switch buffer")
     "ud" '(evil-delete-buffer :which-key "delete current buffer")
     "uo" '(read-only-mode :which-key "toggle read only mode")
-    "up" '(helm-projectile :which-key "open in project")
     "us" '(save-buffer :which-key "save this buffer")
     "uS" '(write-file :which-key "write to file")
-    "uu" '(helm-mini :which-key "switch buffer"))
+    "uu" '(helm-projectile :which-key "open in project"))
 
   (global-def
     "w"  '(:ignore t :which-key "window")
@@ -197,9 +202,8 @@
 
   (global-def
     "p" '(:ignore t :which-key "execute")
-    "px" '(projectile-run-async-shell-command-in-root :which-key "command in root")
     "ph" '(projectile-run-eshell :which-key "shell in project")
-    "ps" '(helm-projectile-ack :which-key "search"))
+    "px" '(projectile-run-async-shell-command-in-root :which-key "command in root"))
 
   (global-def
     "M-SPC" 'helm-M-x))
