@@ -9,6 +9,7 @@
         lsp-enable-file-watchers nil
         lsp-highlight-symbol-at-point nil
         lsp-inhibit-message t
+        lsp-prefer-capf t
         lsp-prefer-flymake nil))
 
 (use-package lsp-treemacs

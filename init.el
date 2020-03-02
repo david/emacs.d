@@ -151,6 +151,9 @@
   (set-face-attribute
    'default nil :family "Cascadia Code PL" :foreground "#cccccc" :height 95)
 
+  (setq gc-cons-threshold 100000000)
+  (setq read-process-output-max (* 1024 1024))
+
   (add-hook 'before-save-hook 'delete-trailing-whitespace))
 
 (use-package site-minibuffer
@@ -183,14 +186,6 @@
   :hook (after-init . global-company-mode)
   :config
   (push 'company-yasnippet company-backends))
-
-(use-package company-lsp
-  :after (company lsp-mode yasnippet)
-  :config
-  (push 'company-lsp company-backends)
-  (setq company-lsp-async t
-        company-lsp-cache-candidates t
-        company-lsp-enable-snippet t))
 
 ;;; Evil
 
