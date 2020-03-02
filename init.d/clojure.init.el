@@ -27,6 +27,7 @@
               (global-def
                 "cxf" '(cider-eval-defun-at-point :which-key "defun at point")
                 "cxu" '(cider-eval-buffer :which-key "buffer")
+                "cxx" '(cider-eval-last-sexp :which-key "last sexp")
                 "re"  '(:ignore t :which-key "evals")
                 "rn"  '(:ignore t :which-key "namespace")
                 "rnr" '(cider-ns-reload :which-key "reload")
