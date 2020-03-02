@@ -31,3 +31,5 @@
   (if (equal 'rails-test (projectile-project-type))
       (global-def
         "rs" '(inf-ruby-console-rails :which-key "start"))))
+
+(use-package slim-mode)
