@@ -2,7 +2,8 @@
   :no-require t
   :init
   (require 'helm-config)
-
+  :custom
+  (helm-buffer-max-length 40)
   :config
   (setq helm-ff-auto-update-initial-value t)
   (setq helm-grep-ag-command "rg --color=always --colors 'match:fg:black' --colors 'match:bg:yellow' --smart-case --no-heading --line-number %s %s %s")
