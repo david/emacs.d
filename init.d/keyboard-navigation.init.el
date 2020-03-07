@@ -75,8 +75,8 @@
 
   (general-define-key
    :states '(normal motion visual)
-   "f" 'avy-goto-char-in-line
-   "F" 'avy-goto-char-timer)
+   "f" 'evil-avy-goto-char-in-line
+   "F" 'evil-avy-goto-char-timer)
 
   (defun ior3k-insert-semicolon-at-eol ()
     (interactive)
