@@ -32,9 +32,4 @@
   (helm-projectile-on))
 
 (use-package wgrep-helm
-  :after (helm)
-  :config
-  (add-to-list 'display-buffer-alist
-               '("^\\*hgrep"
-                 (display-buffer-reuse-window display-buffer-same-window)
-                 (reusable-frames . t))))
+  :after (helm))

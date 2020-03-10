@@ -7,11 +7,6 @@
   (setq compilation-buffer-name-function
         (lambda (_) (concat "*compilation: " (projectile-project-name) "*")))
 
-  (add-to-list 'display-buffer-alist
-               '("^\\*compilation.*"
-                 (display-buffer-reuse-window display-buffer-same-window)
-                 (reusable-frames . t)))
-
   (defun ior3k/advice-compilation-filter (f proc string)
     (funcall f proc (xterm-color-filter string)))
 

@@ -13,6 +13,7 @@
 (add-to-list 'load-path (expand-file-name (concat user-emacs-directory "/init.d")))
 
 (load-library "keyboard-navigation.init")
+(load-library "window-management.init")
 (load-library "shell.init")
 (load-library "compilation.init")
 (load-library "helm.init")

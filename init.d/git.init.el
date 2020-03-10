@@ -21,6 +21,13 @@
     "vur" '(git-gutter:revert-hunk :which-key "revert hunk")
     "vus" '(git-gutter:stage-hunk :which-key "stage hunk")))
 
+(use-package git-window-management
+  :ensure nil
+  :no-require t
+  :config
+  (add-to-list 'display-buffer-alist '(".*\\*transient\\*.*" . ((display-buffer-in-side-window))))
+  (add-to-list 'display-buffer-alist '(".*magit: transient.*" . ((display-buffer-in-side-window)))))
+
 (use-package magit
   :after general
   :commands (magit-status)
@@ -29,12 +36,7 @@
   (setq magit-log-arguments '("-n128" "--decorate"))
   (setq magit-rebase-arguments '("--autostash"))
   (setq magit-branch-arguments nil)
-  (setq magit-commit-show-diff nil)
-
-  (add-to-list 'display-buffer-alist
-               '("^magit.*:.*"
-                 (display-buffer-reuse-window display-buffer-same-window)
-                 (reusable-frames . t))))
+  (setq magit-commit-show-diff nil))
 
 (use-package evil-magit
   :after (evil general magit)

@@ -39,11 +39,6 @@
 
   (setq eshell-prompt-function 'eshell-prompt-func)
 
-  (add-to-list 'display-buffer-alist
-               '("^\\*eshell.*"
-                 (display-buffer-reuse-window display-buffer-same-window)
-                 (reusable-frames . t)))
-
   (add-hook 'eshell-before-prompt-hook
             (lambda ()
               (setq xterm-color-preserve-properties t)))
@@ -52,12 +47,3 @@
 
   (setq eshell-output-filter-functions
 	(remove 'eshell-handle-ansi-color eshell-output-filter-functions)))
-
-(use-package async-shell-command
-  :ensure nil
-  :no-require t
-  :config
-  (add-to-list 'display-buffer-alist
-               '("^\\*Async Shell Command\\*"
-                 (display-buffer-reuse-window display-buffer-same-window)
-                 (reusable-frames . t))))

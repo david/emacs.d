@@ -7,11 +7,6 @@
 (use-package cider
   :after (general)
   :config
-  (add-to-list 'display-buffer-alist
-               '("^\\*cider-repl"
-                 (display-buffer-reuse-window display-buffer-same-window)
-                 (reusable-frames . t)))
-
   (add-hook 'clojure-mode-hook 'cider-mode))
 
 (use-package cider-eval-sexp-fu

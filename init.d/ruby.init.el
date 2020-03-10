@@ -4,12 +4,7 @@
   :after lsp
   :hook ((ruby-mode . lsp)))
 
-(use-package inf-ruby
-  :config
-  (add-to-list 'display-buffer-alist
-               '("^\\*rails"
-                 (display-buffer-reuse-window display-buffer-same-window)
-                 (reusable-frames . t))))
+(use-package inf-ruby)
 
 (use-package web-mode-ruby
   :after (web-mode)

@@ -1,11 +1,6 @@
 (use-package prodigy
   :after (general)
   :config
-  (add-to-list 'display-buffer-alist
-               '("^\\*prodigy.*\\*$"
-                 (display-buffer-reuse-window display-buffer-same-window)
-                 (reusable-frames . t)))
-
   (prodigy-define-tag
     :name 'postgres
     :command "postgres"
