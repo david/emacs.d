@@ -24,6 +24,7 @@
 (use-package git-window-management
   :ensure nil
   :no-require t
+  :hook ((git-commit-setup . ior3k/git-commit-setup))
   :config
   (add-to-list 'display-buffer-alist '(".*\\*transient\\*.*" . ((display-buffer-in-side-window))))
   (add-to-list 'display-buffer-alist '(".*magit: transient.*" . ((display-buffer-in-side-window)))))
@@ -56,3 +57,7 @@
   (git-gutter:deleted-sign "-")
   :config
   (global-git-gutter-mode 1))
+
+(defun ior3k/git-commit-setup ()
+  (setq-local fill-column 70)
+  (auto-fill-mode 1))
