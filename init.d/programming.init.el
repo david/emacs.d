@@ -30,7 +30,16 @@
   :no-require t
   :hook ((prog-mode . smartparens-mode)
          (prog-mode . subword-mode)
-         (prog-mode . flycheck-mode)))
+         (prog-mode . flycheck-mode)
+         (prog-mode . ior3k/add-prog-keybindings)))
 
 (use-package rainbow-delimiters
   :hook ((prog-mode . rainbow-delimiters-mode)))
+
+(defun ior3k/add-prog-keybindings ()
+  (general-define-key
+   :states 'normal
+   :keymaps 'local
+   "ge" '(flycheck-next-error :which-key "next error in file")
+   "gE" '(flycheck-previous-error :which-key "previous error in file")
+   "gy" '(helm-imenu :which-key "go to symbol in current file")))

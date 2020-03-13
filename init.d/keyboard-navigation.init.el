@@ -128,14 +128,11 @@
     "cc"  '(projectile-compile-project :which-key "compile")
     "cC"  '(recompile :which-key "recompile")
     "ca"  '(lsp-execute-code-action :which-key "action")
-    "cen" '(flycheck-next-error :which-key "next error in file")
-    "ceN" '(flycheck-previous-error :which-key "previous error in file")
     "cet" '(lsp-treemacs-errors-list :which-key "show errors in tree")
     "ch"  '(lsp-describe-thing-at-point :which-key "show symbol documentation")
     "cr"  '(lsp-rename :which-key "rename symbol")
     "cwr" '(lsp-workspace-restart :which-key "restart")
-    "cx"  '(:ignore t :which-key "evals")
-    "cy"  '(helm-imenu :which-key "symbol in file"))
+    "cx"  '(:ignore t :which-key "evals"))
 
   (global-def
     "e"  '(:ignore t :which-key "edit")
