@@ -31,6 +31,10 @@
   (when (equal 'rails-test (projectile-project-type))
     (global-def
       :keymaps 'local
-      "rs" '(inf-ruby-console-rails :which-key "start"))))
+      "rs" '(ior3k/rails-console :which-key "start"))))
+
+(defun ior3k/rails-console ()
+  (interactive)
+  (inf-ruby-console-rails (projectile-project-root)))
 
 (use-package slim-mode)
