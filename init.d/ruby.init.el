@@ -1,3 +1,8 @@
+(use-package ruby-keybindings
+  :no-require t
+  :ensure nil
+  :hook ((ruby-mode . ior3k/rails-project-add-keybindings)))
+
 (use-package ruby-mode
   :no-require t
   :ensure nil
@@ -23,8 +28,9 @@
      (sp-pair "%" "%"))))
 
 (defun ior3k/rails-project-add-keybindings ()
-  (if (equal 'rails-test (projectile-project-type))
-      (global-def
-        "rs" '(inf-ruby-console-rails :which-key "start"))))
+  (when (equal 'rails-test (projectile-project-type))
+    (global-def
+      :keymaps 'local
+      "rs" '(inf-ruby-console-rails :which-key "start"))))
 
 (use-package slim-mode)
