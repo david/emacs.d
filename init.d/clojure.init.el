@@ -16,7 +16,8 @@
   :after (cider general projectile)
   :no-require t
   :ensure nil
-  :hook ((clojure-mode . ior3k/add-clojure-keybindings)))
+  :hook ((clojure-mode . ior3k/add-clojure-keybindings)
+         (cider-repl-mode . ior3k/add-clojure-keybindings)))
 
 (use-package clj-refactor
   :after (cider clojure-mode yas)
