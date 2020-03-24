@@ -9,7 +9,8 @@
   :after lsp
   :hook ((ruby-mode . lsp)))
 
-(use-package inf-ruby)
+(use-package inf-ruby
+  :hook ((inf-ruby . subword-mode)))
 
 (use-package web-mode-ruby
   :after (web-mode)
