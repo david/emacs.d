@@ -346,11 +346,12 @@
         '((evil   . (telephone-line-airline-position-segment))
           (accent . (telephone-line-projectile-segment))
           (nil    . (telephone-line-buffer-modified-segment
+                     telephone-line-process-segment
                      telephone-line-buffer-name-segment))))
   (setq telephone-line-rhs
-        '((nil   .  (telephone-line-flycheck-segment))
-          (accent . (telephone-line-process-segment))
-          (evil    . (telephone-line-evil-tag-segment))))
+        '((nil    . (telephone-line-flycheck-segment))
+          (accent . (telephone-line-simple-major-mode-segment))
+          (evil   . (telephone-line-evil-tag-segment))))
 
   (telephone-line-mode 1))
 
