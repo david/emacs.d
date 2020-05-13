@@ -30,7 +30,7 @@
 (load-library "sql.init")
 (load-library "typescript.init")
 (load-library "org.init")
-(load-library "keyboard-navigation.init")
+(load-library "keybindings.init")
 
 (use-package display-line-numbers
   :no-require t
