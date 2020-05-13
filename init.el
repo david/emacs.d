@@ -12,7 +12,6 @@
 
 (add-to-list 'load-path (expand-file-name (concat user-emacs-directory "/init.d")))
 
-(load-library "keyboard-navigation.init")
 (load-library "window-management.init")
 (load-library "shell.init")
 (load-library "compilation.init")
@@ -30,6 +29,7 @@
 (load-library "sql.init")
 (load-library "typescript.init")
 (load-library "org.init")
+(load-library "keyboard-navigation.init")
 
 (use-package display-line-numbers
   :no-require t
