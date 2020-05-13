@@ -2,10 +2,6 @@
   :after (evil evil-collection helm)
   :config
 
-  (general-create-definer ior3k-def
-    :states '(emacs insert motion normal visual)
-    :prefix "M-SPC")
-
   (general-define-key
    :states '(emacs insert motion normal visual)
 
