@@ -3,6 +3,12 @@
   :config
 
   (general-define-key
+   :states '(normal motion visual)
+   :keymaps 'local
+   "f" 'evilem-motion-find-char
+   "F" 'evilem-motion-find-char-backward)
+
+  (general-define-key
    :states '(emacs insert motion normal visual)
 
    "M-h" 'windmove-left
@@ -20,11 +26,6 @@
    "+"   'universal-argument
    "q"   'previous-buffer
    "Q"   'delete-other-windows)
-
-  (general-define-key
-   :states '(normal motion visual)
-   "f" 'evil-avy-goto-char-in-line
-   "F" 'evil-avy-goto-char-timer)
 
   (defun ior3k-insert-semicolon-at-eol ()
     (interactive)
