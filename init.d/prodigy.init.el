@@ -42,6 +42,17 @@
     :ready-message ".*Starting mysqld daemon with databases from.*")
 
   (prodigy-define-tag
+    :name 'redis
+    :command "redis-server"
+    :ready-message ".*Ready to accept connections.*")
+
+  (prodigy-define-tag
+    :name 'sidekiq
+    :command "bundle"
+    :args '("exec" "sidekiq")
+    :ready-message ".*Starting processing.*")
+
+  (prodigy-define-tag
     :name 'elasticsearch
     :command "elasticsearch"
     :ready-message ".*Starting mysqld daemon with databases from.*")
