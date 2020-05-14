@@ -26,7 +26,8 @@
 
   (prodigy-define-tag
     :name 'webpack-server
-    :command "webpack-dev-server"
+    :command "ruby"
+    :args '("bin/webpack-dev-server")
     :ready-message ": Compiled successfully")
 
   (prodigy-define-tag
