@@ -73,7 +73,7 @@
 
   (global-def
     "b"  '(:ignore t :which-key "buffer")
-    "ba" '(helm-mini :which-key "switch buffer")
+    "bb" '(helm-mini :which-key "switch buffer")
     "bd" '(evil-delete-buffer :which-key "delete current buffer")
     "bo" '(read-only-mode :which-key "toggle read only mode")
     "bs" '(save-buffer :which-key "save this buffer")
