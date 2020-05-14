@@ -73,6 +73,15 @@
     :prefix "M-SPC")
 
   (global-def
+    "b"  '(:ignore t :which-key "buffer")
+    "ba" '(helm-mini :which-key "switch buffer")
+    "bd" '(evil-delete-buffer :which-key "delete current buffer")
+    "bo" '(read-only-mode :which-key "toggle read only mode")
+    "bs" '(save-buffer :which-key "save this buffer")
+    "bS" '(write-file :which-key "write to file")
+    "bu" '(helm-projectile :which-key "open in project"))
+
+  (global-def
     "c"   '(:ignore t :which-key "code")
     "cc"  '(projectile-compile-project :which-key "compile")
     "cC"  '(recompile :which-key "recompile")
@@ -139,14 +148,6 @@
     "r" '(:ignore t :which-key "repl"))
 
   (global-def
-    "u"  '(:ignore t :which-key "buffer")
-    "ua" '(helm-mini :which-key "switch buffer")
-    "ud" '(evil-delete-buffer :which-key "delete current buffer")
-    "uo" '(read-only-mode :which-key "toggle read only mode")
-    "us" '(save-buffer :which-key "save this buffer")
-    "uS" '(write-file :which-key "write to file")
-    "uu" '(helm-projectile :which-key "open in project"))
-
   (global-def
     "w"  '(:ignore t :which-key "window")
     "wd" '(delete-window :which-key "delete current")
