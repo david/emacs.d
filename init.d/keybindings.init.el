@@ -85,7 +85,6 @@
 
   (global-def
     "e"  '(:ignore t :which-key "edit")
-    "es" '(helm-projectile-ack :which-key "search in project")
     "eS"  '(:ignore t :which-key "snippets")
     "eSn" '(yas-new-snippet :which-key "new snippet")
     "eSS" '(yas-visit-snippet-file :which-key "find snippet file")
@@ -123,6 +122,15 @@
     "md" '(delete-frame :which-key "delete current")
     "mm" '(make-frame-command :which-key "new"))
 
+  (general-define-key
+   :states '(normal insert)
+   :prefix "M-SPC"
+
+    "p" '(:ignore t :which-key "project")
+    "ph" '(projectile-run-eshell :which-key "shell in project")
+    "ps" '(counsel-ack :which-key "search in project")
+    "px" '(projectile-run-async-shell-command-in-root :which-key "command in root"))
+
   (global-def
     "q"  '(:ignore t :which-key "sql")
     "qq" '(sql-connect :which-key "connect"))
@@ -146,10 +154,6 @@
     "wj" '(split-window-below :which-key "open below")
     "wl" '(split-window-right :which-key "open right"))
 
-  (global-def
-    "p" '(:ignore t :which-key "execute")
-    "ph" '(projectile-run-eshell :which-key "shell in project")
-    "px" '(projectile-run-async-shell-command-in-root :which-key "command in root"))
 
   (global-def
     "M-SPC" 'helm-M-x))
