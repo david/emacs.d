@@ -22,7 +22,6 @@
   (general-define-key
    :states 'normal
 
-   "SPC" 'evil-scroll-page-down
    "+"   'universal-argument
    "q"   'previous-buffer
    "Q"   'delete-other-windows)
