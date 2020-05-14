@@ -148,6 +148,23 @@
     "r" '(:ignore t :which-key "repl"))
 
   (global-def
+    "v"   '(:ignore t :which-key "version control")
+    "vb"  '(magit-blame-addition :which-key "blame")
+    "vc"  '(:ignore t :which-key "conflicts")
+    "vca" '(smerge-keep-current :which-key "keep all parts")
+    "vcn" '(smerge-next :which-key "go to next conflict")
+    "vcN" '(smerge-prev :which-key "go to previous conflict")
+    "vcj" '(smerge-keep-lower :which-key "keep lower part")
+    "vck" '(smerge-keep-upper :which-key "keep upper part")
+    "vcl" '(smerge-keep-current :which-key "keep part under cursor")
+    "vlf" '(magit-log-buffer-file :which-key "commits related to file")
+    "vv"  '(projectile-vc :which-key "git status")
+    "vu"  '(:ignore t :which-key "in buffer")
+    "vun" '(git-gutter:next-hunk :which-key "next hunk")
+    "vup" '(git-gutter:previous-hunk :which-key "previous hunk")
+    "vur" '(git-gutter:revert-hunk :which-key "revert hunk")
+    "vus" '(git-gutter:stage-hunk :which-key "stage hunk"))
+
   (global-def
     "w"  '(:ignore t :which-key "window")
     "wd" '(delete-window :which-key "delete current")
@@ -155,6 +172,34 @@
     "wj" '(split-window-below :which-key "open below")
     "wl" '(split-window-right :which-key "open right"))
 
+  (general-define-key
+   :prefix "M-SPC"
+   :states '(normal insert)
 
-  (global-def
-    "M-SPC" 'helm-M-x))
+   "M-SPC" 'counsel-M-x))
+
+(use-package elisp-keybindings
+  :ensure nil
+  :no-require t
+  :config
+  (general-define-key
+   :keymaps '(emacs-lisp-mode-map)
+   :prefix "M-SPC"
+   :states '(normal insert)
+
+   "e"  '(:ignore t :which-key "eval")
+   "ee" '(eval-last-sexp :which-key "last expression")
+   "ef" '(eval-defun :which-key "defun")
+   "eb" '(eval-buffer :which-key "buffer")))
+
+(use-package clojure-project-keybindings
+  :ensure nil
+  :no-require t
+  :config
+  (general-define-key
+   :predicate '(equal 'lein-test (projectile-project-type))
+   :prefix "M-SPC"
+   :states '(normal insert)
+
+   "e"   '(:ignore t :which-key "eval")
+   "er"  '(:ignore t :which-key "repl")))

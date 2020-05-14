@@ -1,26 +1,3 @@
-(use-package git-keybindings
-  :after general
-  :ensure nil
-  :no-require t
-  :config
-  (global-def
-    "v"   '(:ignore t :which-key "version control")
-    "vb"  '(magit-blame-addition :which-key "blame")
-    "vc"  '(:ignore t :which-key "conflicts")
-    "vca" '(smerge-keep-current :which-key "keep all parts")
-    "vcn" '(smerge-next :which-key "go to next conflict")
-    "vcN" '(smerge-prev :which-key "go to previous conflict")
-    "vcj" '(smerge-keep-lower :which-key "keep lower part")
-    "vck" '(smerge-keep-upper :which-key "keep upper part")
-    "vcl" '(smerge-keep-current :which-key "keep part under cursor")
-    "vlf" '(magit-log-buffer-file :which-key "commits related to file")
-    "vv"  '(projectile-vc :which-key "git status")
-    "vu"  '(:ignore t :which-key "in buffer")
-    "vun" '(git-gutter:next-hunk :which-key "next hunk")
-    "vup" '(git-gutter:previous-hunk :which-key "previous hunk")
-    "vur" '(git-gutter:revert-hunk :which-key "revert hunk")
-    "vus" '(git-gutter:stage-hunk :which-key "stage hunk")))
-
 (use-package git-window-management
   :ensure nil
   :no-require t
