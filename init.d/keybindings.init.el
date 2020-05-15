@@ -1,5 +1,5 @@
 (use-package general
-  :after (evil evil-collection helm)
+  :after (evil evil-collection ivy)
   :config
 
   (general-create-definer motion-def
@@ -75,12 +75,12 @@
 
   (global-command-def
     "b"  '(:ignore t :which-key "buffer")
-    "bb" '(helm-mini :which-key "switch buffer")
+    "bb" '(ivy-switch-buffer :which-key "switch buffer")
     "bd" '(evil-delete-buffer :which-key "delete current buffer")
     "bo" '(read-only-mode :which-key "toggle read only mode")
+    "bp" '(counsel-projectile :which-key "open in project")
     "bs" '(save-buffer :which-key "save this buffer")
-    "bS" '(write-file :which-key "write to file")
-    "bu" '(helm-projectile :which-key "open in project"))
+    "bS" '(write-file :which-key "write to file"))
 
   (global-command-def
     "c"   '(:ignore t :which-key "code")
@@ -106,9 +106,8 @@
     "f"  '(:ignore t :which-key "file")
     "fa" '(find-alternate-file :which-key "reload")
     "fd" '(delete-current-file :which-key "delete current")
-    "ff" '(helm-find-files :which-key "find in current directory")
+    "ff" '(counsel-find-file :which-key "find in current directory")
     "fi" '(insert-file :which-key "insert contents")
-    "fp" '(helm-browse-project :which-key "open in project")
     "fr" '(er-rename-file-and-buffer :which-key "rename")
     "fs" '(write-file :which-key "save as")
     "fw" '(pwd :which-key "pwd"))

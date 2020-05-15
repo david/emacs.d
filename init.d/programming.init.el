@@ -23,9 +23,6 @@
   (setq lsp-ui-doc-use-childframe nil)
   (setq lsp-ui-sideline-enable nil))
 
-(use-package helm-lsp
-  :after (lsp-mode))
-
 (use-package prog-mode
   :after (company)
   :ensure nil
@@ -44,4 +41,4 @@
    :keymaps 'local
    "ge" '(flycheck-next-error :which-key "next error in file")
    "gE" '(flycheck-previous-error :which-key "previous error in file")
-   "gy" '(helm-imenu :which-key "go to symbol in current file")))
+   "gy" '(counsel-imenu :which-key "go to symbol in current file")))

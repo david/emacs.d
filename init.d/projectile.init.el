@@ -1,6 +1,9 @@
 (use-package projectile
-  :after (helm)
+  :after (ivy)
   :config
-  (setq projectile-completion-system 'helm)
+  (setq projectile-completion-system 'ivy)
 
   (projectile-mode 1))
+
+(use-package counsel-projectile
+  :commands (counsel-projectile))

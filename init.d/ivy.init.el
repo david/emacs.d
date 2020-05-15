@@ -1,6 +1,11 @@
-(use-package counsel
-  :after (ivy)
-  :commands (counsel-ack
-             counsel-M-x))
+(use-package ivy
+  :custom
+  (ivy-count-format "")
+  (ivy-height 20)
+  (ivy-initial-inputs-alist nil t)
+  (ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
 
-(use-package ivy)
+  :config
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+
+  (ivy-mode 1))

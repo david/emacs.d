@@ -27,11 +27,6 @@
               (clj-refactor-mode 1)
               (yas-minor-mode 1))))
 
-(use-package helm-cider
-  :after (cider helm)
-  :config
-  (helm-cider-mode 1))
-
 (defun ior3k/add-clojure-keybindings ()
   (when (equal 'lein-test (projectile-project-type))
     (global-def

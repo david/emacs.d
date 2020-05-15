@@ -12,18 +12,11 @@
   :after evil)
 
 (use-package evil-collection
-  :after (evil helm)
+  :after evil
   :init
   (setq evil-collection-setup-minibuffer t)
 
   (evil-collection-init)
-
-  (evil-collection-define-key 'insert 'helm-map
-    (kbd "C-n") nil
-
-    (kbd "C-p") nil
-    (kbd "C-k") 'helm-previous-line
-    (kbd "C-j") 'helm-next-line)
 
   (evil-collection-define-key 'normal 'lsp-treemacs-error-list-mode-map
     (kbd "=") 'lsp-treemacs-cycle-severity
