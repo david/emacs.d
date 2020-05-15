@@ -1,6 +1,8 @@
 (use-package aggressive-indent
   :hook ((clojure-mode . aggressive-indent-mode)))
 
+(use-package expand-region)
+
 (use-package lsp-mode
   :config
   (setq lsp-auto-guess-root t
