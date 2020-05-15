@@ -13,6 +13,7 @@
 (add-to-list 'load-path (expand-file-name (concat user-emacs-directory "/init.d")))
 
 (load-library "theme.init")
+(load-library "minibuffer.init")
 (load-library "evil.init")
 (load-library "window-management.init")
 (load-library "shell.init")
@@ -336,22 +337,6 @@
    "C-h" 'sp-forward-barf-sexp)
 
   (show-smartparens-global-mode 1))
-
-(use-package telephone-line
-  :config
-  (setq telephone-line-evil-use-short-tag t)
-  (setq telephone-line-lhs
-        '((evil   . (telephone-line-airline-position-segment))
-          (accent . (telephone-line-projectile-segment))
-          (nil    . (telephone-line-buffer-modified-segment
-                     telephone-line-process-segment
-                     telephone-line-buffer-name-segment))))
-  (setq telephone-line-rhs
-        '((nil    . (telephone-line-flycheck-segment))
-          (accent . (telephone-line-simple-major-mode-segment))
-          (evil   . (telephone-line-evil-tag-segment))))
-
-  (telephone-line-mode 1))
 
 (use-package terraform-mode)
 
