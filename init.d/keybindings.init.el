@@ -5,6 +5,10 @@
   (general-create-definer motion-def
     :states '(normal motion visual))
 
+  (general-create-definer global-command-def
+    :states '(normal insert)
+    :prefix "M-SPC")
+
   (motion-def
    "f" 'evilem-motion-find-char
    "F" 'evilem-motion-find-char-backward)
@@ -68,11 +72,8 @@
 
    "a" 'evil-outer-arg)
 
-  (general-create-definer global-def
-    :states '(normal visual motion insert emacs)
-    :prefix "M-SPC")
 
-  (global-def
+  (global-command-def
     "b"  '(:ignore t :which-key "buffer")
     "bb" '(helm-mini :which-key "switch buffer")
     "bd" '(evil-delete-buffer :which-key "delete current buffer")
@@ -81,7 +82,7 @@
     "bS" '(write-file :which-key "write to file")
     "bu" '(helm-projectile :which-key "open in project"))
 
-  (global-def
+  (global-command-def
     "c"   '(:ignore t :which-key "code")
     "cc"  '(projectile-compile-project :which-key "compile")
     "cC"  '(recompile :which-key "recompile")
@@ -92,7 +93,7 @@
     "cwr" '(lsp-workspace-restart :which-key "restart")
     "cx"  '(:ignore t :which-key "evals"))
 
-  (global-def
+  (global-command-def
     "E"  '(:ignore t :which-key "editor")
     "Ed" '(dired :which-key "dired")
     "Ek" '(package-list-packages :which-key "packages")
@@ -101,7 +102,7 @@
     "Es" '(prodigy :which-key "servers")
     "Ex"  '(eval-last-sexp :which-key "eval last expression"))
 
-  (global-def
+  (global-command-def
     "f"  '(:ignore t :which-key "file")
     "fa" '(find-alternate-file :which-key "reload")
     "fd" '(delete-current-file :which-key "delete current")
@@ -112,35 +113,32 @@
     "fs" '(write-file :which-key "save as")
     "fw" '(pwd :which-key "pwd"))
 
-  (global-def
+  (global-command-def
     "h"  '(:ignore t :which-key "help")
     "hf" '(describe-function :which-key "function")
     "hk" '(describe-key :which-key "key")
     "hm" '(describe-mode :which-key "mode")
     "hv" '(describe-variable :which-key "variable"))
 
-  (global-def
+  (global-command-def
     "m"  '(:ignore t :which-key "frame")
     "md" '(delete-frame :which-key "delete current")
     "mm" '(make-frame-command :which-key "new"))
 
-  (general-define-key
-   :states '(normal insert)
-   :prefix "M-SPC"
-
+  (global-command-def
     "p" '(:ignore t :which-key "project")
     "ph" '(projectile-run-eshell :which-key "shell in project")
     "ps" '(counsel-ack :which-key "search in project")
     "px" '(projectile-run-async-shell-command-in-root :which-key "command in root"))
 
-  (global-def
+  (global-command-def
     "q"  '(:ignore t :which-key "sql")
     "qq" '(sql-connect :which-key "connect"))
 
-  (global-def
+  (global-command-def
     "r" '(:ignore t :which-key "repl"))
 
-  (global-def
+  (global-command-def
     "v"   '(:ignore t :which-key "version control")
     "vb"  '(magit-blame-addition :which-key "blame")
     "vc"  '(:ignore t :which-key "conflicts")
@@ -158,27 +156,22 @@
     "vur" '(git-gutter:revert-hunk :which-key "revert hunk")
     "vus" '(git-gutter:stage-hunk :which-key "stage hunk"))
 
-  (global-def
+  (global-command-def
     "w"  '(:ignore t :which-key "window")
     "wd" '(delete-window :which-key "delete current")
     "wD" '(delete-other-windows :which-key "delete other windows")
     "wj" '(split-window-below :which-key "open below")
     "wl" '(split-window-right :which-key "open right"))
 
-  (general-define-key
-   :prefix "M-SPC"
-   :states '(normal insert)
-
+  (global-command-def
    "M-SPC" 'counsel-M-x))
 
 (use-package elisp-keybindings
   :ensure nil
   :no-require t
   :config
-  (general-define-key
-   :keymaps '(emacs-lisp-mode-map)
-   :prefix "M-SPC"
-   :states '(normal insert)
+  (global-command-def
+   :keymaps 'emacs-lisp-mode-map
 
    "e"  '(:ignore t :which-key "eval")
    "ee" '(eval-last-sexp :which-key "last expression")
@@ -189,10 +182,8 @@
   :ensure nil
   :no-require t
   :config
-  (general-define-key
+  (global-command-def
    :predicate '(equal 'lein-test (projectile-project-type))
-   :prefix "M-SPC"
-   :states '(normal insert)
 
    "e"   '(:ignore t :which-key "eval")
    "er"  '(:ignore t :which-key "repl")))

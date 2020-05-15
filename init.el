@@ -242,10 +242,6 @@
    :states 'insert
    :keymaps '(java-mode-map)
    ";" 'ior3k-insert-semicolon-at-eol)
-  (global-def
-    :keymaps 'java-mode-map
-
-    "ci" '(lsp-java-add-import :which-key "code actions"))
 
   (defun ior3k-java-settings ()
     (setq c-basic-offset 4
