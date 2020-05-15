@@ -2,9 +2,10 @@
   :after (evil evil-collection helm)
   :config
 
-  (general-define-key
-   :states '(normal motion visual)
-   :keymaps 'local
+  (general-create-definer motion-def
+    :states '(normal motion visual))
+
+  (motion-def
    "f" 'evilem-motion-find-char
    "F" 'evilem-motion-find-char-backward)
 
