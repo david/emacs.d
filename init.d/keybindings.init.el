@@ -93,13 +93,6 @@
     "cx"  '(:ignore t :which-key "evals"))
 
   (global-def
-    "e"  '(:ignore t :which-key "edit")
-    "eS"  '(:ignore t :which-key "snippets")
-    "eSn" '(yas-new-snippet :which-key "new snippet")
-    "eSS" '(yas-visit-snippet-file :which-key "find snippet file")
-    "eSi" '(yas-insert-snippet :which-key "insert snippet"))
-
-  (global-def
     "E"  '(:ignore t :which-key "editor")
     "Ed" '(dired :which-key "dired")
     "Ek" '(package-list-packages :which-key "packages")
