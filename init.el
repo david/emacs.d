@@ -12,6 +12,7 @@
 
 (add-to-list 'load-path (expand-file-name (concat user-emacs-directory "/init.d")))
 
+(load-library "theme.init")
 (load-library "evil.init")
 (load-library "window-management.init")
 (load-library "shell.init")
@@ -109,10 +110,6 @@
                               `([,(cdr char-regexp) 0 font-shape-gstring])))))
 
   (global-auto-composition-mode))
-
-(use-package atom-one-dark-theme
-  :config
-  (load-theme 'atom-one-dark t))
 
 (use-package site-editor
   :no-require t
