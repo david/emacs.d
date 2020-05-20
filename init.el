@@ -44,14 +44,10 @@
 
 (use-package evil-collection
   :after evil
-  :init
-  (setq evil-collection-setup-minibuffer t)
-
-  (evil-collection-init)
-
-  (evil-collection-define-key 'normal 'lsp-treemacs-error-list-mode-map
-    (kbd "=") 'lsp-treemacs-cycle-severity
-    (kbd "x") 'lsp-treemacs-quick-fix))
+  :custom
+  (evil-collection-setup-minibuffer t)
+  :config
+  (evil-collection-init))
 
 (use-package evil-easymotion)
 
