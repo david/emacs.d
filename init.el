@@ -52,8 +52,8 @@
 (use-package evil-easymotion)
 
 (use-package evil-exchange
-  :config
-  (evil-exchange-install))
+  :after evil
+  :hook (after-init . evil-exchange-install))
 
 (use-package evil-matchit
   :after (evil)
