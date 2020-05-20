@@ -57,9 +57,8 @@
   :hook (after-init . evil-exchange-install))
 
 (use-package evil-matchit
-  :after (evil)
-  :config
-  (global-evil-matchit-mode 1))
+  :after evil
+  :hook (after-init . global-evil-matchit-mode))
 
 (use-package evil-mc
   :config
