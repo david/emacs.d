@@ -10,29 +10,748 @@
 (setq use-package-always-ensure t
       use-package-verbose t)
 
-(add-to-list 'load-path (expand-file-name (concat user-emacs-directory "/init.d")))
+(use-package atom-one-dark-theme
+  :config
+  (load-theme 'atom-one-dark t))
 
-(load-library "theme.init")
-(load-library "minibuffer.init")
-(load-library "evil.init")
-(load-library "ivy.init")
-(load-library "window-management.init")
-(load-library "shell.init")
-(load-library "compilation.init")
-(load-library "git.init")
-(load-library "projectile.init")
-(load-library "prodigy.init")
-(load-library "programming.init")
-(load-library "web.init")
-(load-library "lisp.init")
-(load-library "clojure.init")
-(load-library "docker.init")
-(load-library "coffee.init")
-(load-library "ruby.init")
-(load-library "sql.init")
-(load-library "typescript.init")
-(load-library "org.init")
-(load-library "keybindings.init")
+(use-package telephone-line
+  :custom
+  (telephone-line-evil-use-short-tag t)
+  (telephone-line-lhs
+   '((evil   . (telephone-line-airline-position-segment))
+     (accent . (telephone-line-projectile-segment))
+     (nil    . (telephone-line-buffer-modified-segment
+                telephone-line-process-segment
+                telephone-line-buffer-name-segment))))
+  (telephone-line-rhs
+   '((nil    . (telephone-line-flycheck-segment))
+     (accent . (telephone-line-simple-major-mode-segment))
+     (evil   . (telephone-line-evil-tag-segment))))
+  :hook (after-init . telephone-line-mode))
+
+(use-package evil
+  :init
+  (setq evil-want-integration nil)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  :config
+  (setq-default evil-shift-width 2)
+
+  (evil-mode 1))
+
+(use-package evil-args
+  :after evil)
+
+(use-package evil-collection
+  :after evil
+  :init
+  (setq evil-collection-setup-minibuffer t)
+
+  (evil-collection-init)
+
+  (evil-collection-define-key 'normal 'lsp-treemacs-error-list-mode-map
+    (kbd "=") 'lsp-treemacs-cycle-severity
+    (kbd "x") 'lsp-treemacs-quick-fix))
+
+(use-package evil-easymotion)
+
+(use-package evil-exchange
+  :config
+  (evil-exchange-install))
+
+(use-package evil-matchit
+  :after (evil)
+  :config
+  (global-evil-matchit-mode 1))
+
+(use-package evil-mc
+  :config
+  (global-evil-mc-mode 1))
+
+(use-package evil-surround
+  :config
+  (global-evil-surround-mode 1))
+
+(use-package ivy
+  :custom
+  (ivy-count-format "")
+  (ivy-height 20)
+  (ivy-initial-inputs-alist nil t)
+  (ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
+
+  :config
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+
+  (ivy-mode 1))
+
+(use-package window-management
+  :ensure nil
+  :no-require t
+  :config
+  (setq display-buffer-alist
+        '((".*\\*transient\\*.*" . ((display-buffer-in-side-window)))
+          (".*magit: transient.*" . ((display-buffer-in-side-window)))
+          ("^\\*prodigy-.*\\*$"
+           (display-buffer-reuse-window display-buffer-pop-up-frame)
+           (reusable-frames . t))
+          (""
+           (display-buffer-reuse-window display-buffer-same-window)
+           (reusable-frames . t)))))
+
+(use-package eshell
+  :after (xterm-color)
+  :config
+  (setq eshell-hist-ignoredups t)
+  (setq eshell-history-size 65456)
+  (setq eshell-prompt-regexp "^[0-9:]+ • .* • ")
+  (setq eshell-highlight-prompt nil)
+  (setq ior3k-projects-dir (concat (getenv "HOME") "/projects/"))
+
+  (defun ior3k-project-name (dir)
+    (when (string-match ior3k-projects-dir dir)
+      (car
+       (split-string (replace-regexp-in-string ior3k-projects-dir "" dir) "/"))))
+
+  (defun eshell-prompt-func ()
+    (let* ((dir (eshell/pwd))
+	   (time (format-time-string "%H:%M:%S" (current-time)))
+	   (project (ior3k-project-name dir))
+	   (child-dir (file-name-nondirectory dir))
+	   (no-project-dir (replace-regexp-in-string (getenv "HOME") "~" dir)))
+      (atom-one-dark-with-color-variables
+        (concat
+         time
+         " • "
+         (propertize
+          (if project project no-project-dir)
+          'face `(:foreground ,atom-one-dark-orange-1))
+         (if (and project (not (equal project child-dir)))
+             (concat " [" child-dir "]"))
+         (propertize
+          " •"
+          'face `(:foreground ,atom-one-dark-fg))
+         " "))))
+
+  (add-hook 'eshell-mode-hook
+            (lambda()
+              (setenv "TERM" "xterm-256color")
+              (add-to-list 'eshell-visual-commands "ssh")))
+
+  (setq eshell-prompt-function 'eshell-prompt-func)
+
+  (add-hook 'eshell-before-prompt-hook
+            (lambda ()
+              (setq xterm-color-preserve-properties t)))
+
+  (add-to-list 'eshell-preoutput-filter-functions 'xterm-color-filter)
+
+  (setq eshell-output-filter-functions
+	(remove 'eshell-handle-ansi-color eshell-output-filter-functions)))
+
+(use-package site-compilation
+  :no-require t
+  :ensure nil
+  :config
+  (setq compilation-environment '("TERM=xterm-256color"))
+  (setq compilation-scroll-output 'first-error)
+  (setq compilation-buffer-name-function
+        (lambda (_) (concat "*compilation: " (projectile-project-name) "*")))
+
+  (defun ior3k/advice-compilation-filter (f proc string)
+    (funcall f proc (xterm-color-filter string)))
+
+  (advice-add 'compilation-filter :around #'ior3k/advice-compilation-filter))
+
+(use-package git-window-management
+  :ensure nil
+  :no-require t
+  :hook ((git-commit-setup . ior3k/git-commit-setup)))
+
+(use-package magit
+  :after general
+  :commands (magit-status)
+  :config
+  (setq magit-commit-show-diff nil)
+  (setq magit-log-arguments '("-n128" "--decorate"))
+  (setq magit-rebase-arguments '("--autostash"))
+  (setq magit-branch-arguments nil)
+  (setq magit-commit-show-diff nil))
+
+(use-package evil-magit
+  :after (evil general magit)
+  :config
+
+  (general-define-key
+   :states '(normal visual motion)
+   :keymaps '(magit-mode-map magit-revision-mode-map)
+
+   "C-w" 'delete-frame))
+
+(use-package git-gutter-fringe
+  :custom
+  (git-gutter:update-interval 2)
+  (git-gutter-fr:side 'right-fringe)
+  (git-gutter:added-sign "+")
+  (git-gutter:deleted-sign "-")
+  :config
+  (global-git-gutter-mode 1))
+
+(defun ior3k/git-commit-setup ()
+  (setq-local fill-column 70)
+  (auto-fill-mode 1))
+
+(use-package projectile
+  :after (ivy)
+  :config
+  (setq projectile-completion-system 'ivy)
+
+  (projectile-mode 1))
+
+(use-package counsel-projectile
+  :commands (counsel-projectile))
+
+(use-package prodigy
+  :after (general)
+  :config
+  (prodigy-define-tag
+    :name 'postgres
+    :command "postgres"
+    :ready-message ".*database system is ready to accept connections")
+
+  (prodigy-define-tag
+    :name 'phoenix
+    :command "mix"
+    :args '("phx.server")
+    :ready-message ".*Access.*\\.Endpoint at http.*")
+
+  (prodigy-define-tag
+    :name 'rails-server
+    :command "rails"
+    :args '("server" "--port" "4000")
+    :ready-message ".*Worker.*booted.*")
+
+  (prodigy-define-tag
+    :name 'webpack-server
+    :command "ruby"
+    :args '("bin/webpack-dev-server")
+    :ready-message ": Compiled successfully")
+
+  (prodigy-define-tag
+    :name 'mariadb
+    :command "mysqld"
+    :ready-message ".*mysqld: ready for connections.*"
+    :stop-signal 'sigterm)
+
+  (prodigy-define-tag
+    :name 'redis
+    :command "redis-server"
+    :ready-message ".*Ready to accept connections")
+
+  (prodigy-define-tag
+    :name 'sidekiq
+    :command "bundle"
+    :args '("exec" "sidekiq")
+    :ready-message ".*Starting processing.*")
+
+  (prodigy-define-tag
+    :name 'elasticsearch
+    :command "elasticsearch"
+    :ready-message ".*\\[timbuktu\\] started")
+
+  (prodigy-define-tag
+    :name 'fakes3
+    :command "bundle"
+    :args '("exec" "fakes3" "-r" ".local-s3/" "-p" "4567" "-H" "fakes3")
+    :ready-message ".*WEBrick::HTTPServer#start.*")
+
+  (general-define-key
+   :states '(normal)
+   :keymaps 'prodigy-view-mode-map
+   :prefix "g"
+
+   "c" 'prodigy-view-clear-buffer
+   "r" 'prodigy-restart
+   "S" 'prodigy-stop
+   "s" 'prodigy-start))
+
+(use-package aggressive-indent
+  :hook ((clojure-mode . aggressive-indent-mode)))
+
+(use-package expand-region)
+
+(use-package lsp-mode
+  :config
+  (setq lsp-auto-guess-root t
+        lsp-eldoc-render-all nil
+        lsp-enable-snippet t
+        lsp-enable-file-watchers nil
+        lsp-highlight-symbol-at-point nil
+        lsp-inhibit-message t
+        lsp-prefer-capf t
+        lsp-prefer-flymake nil))
+
+(use-package lsp-treemacs
+  :after (lsp-mode))
+
+(use-package lsp-ui
+  :config
+  (setq lsp-ui-doc-enable nil)
+  (setq lsp-ui-doc-use-childframe nil)
+  (setq lsp-ui-sideline-enable nil))
+
+(use-package prog-mode
+  :after (company)
+  :ensure nil
+  :no-require t
+  :hook ((prog-mode . smartparens-mode)
+         (prog-mode . subword-mode)
+         (prog-mode . flycheck-mode)
+         (prog-mode . ior3k/add-prog-keybindings)))
+
+(use-package rainbow-delimiters
+  :hook ((prog-mode . rainbow-delimiters-mode)))
+
+(defun ior3k/add-prog-keybindings ()
+  (general-define-key
+   :states 'normal
+   :keymaps 'local
+   "ge" '(flycheck-next-error :which-key "next error in file")
+   "gE" '(flycheck-previous-error :which-key "previous error in file")
+   "gy" '(counsel-imenu :which-key "go to symbol in current file")))
+
+(use-package web-mode
+  :config
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-attr-indent-offset 2))
+
+(use-package lispyville
+  :after (evil-collection)
+  :hook ((emacs-lisp-mode . lispyville-mode)
+         (lisp-mode . lispyville-mode)
+         (clojure-mode . lispyville-mode))
+  :config
+  (lispyville-set-key-theme
+   '(operators
+     c-w
+     text-objects
+     atom-movement
+     (additional-movement normal visual motion)
+     slurp/barf-lispy
+     additional)))
+
+'(use-package clojure-keybindings
+  :after general
+  :ensure nil
+  :no-require t
+  :config
+  (global-def
+    :keymaps '(clojure-mode-map cider-repl-mode-map)
+    "cxf" '(cider-eval-defun-at-point :which-key "defun at point")
+    "cxu" '(cider-eval-buffer :which-key "buffer")
+    "cxx" '(cider-eval-last-sexp :which-key "last sexp")
+    "re"  '(:ignore t :which-key "evals")
+    "rn"  '(:ignore t :which-key "namespace")
+    "rnr" '(cider-ns-reload :which-key "reload")
+    "rns" '(cider-repl-set-ns :which-key "set repl namespace")
+    "rq"  '(cider-quit :which-key "quit")
+    "rs"  '(cider-jack-in-clj :which-key "start")))
+
+(use-package edn)
+
+(use-package clojure-mode
+  :config
+  (put-clojure-indent 'match 1))
+
+(use-package cider
+  :after (general)
+  :config
+  (add-hook 'clojure-mode-hook 'cider-mode))
+
+(use-package cider-eval-sexp-fu
+  :after (cider))
+
+(use-package clj-refactor
+  :after (cider clojure-mode yas)
+  :config
+  (add-hook 'clojure-mode-hook
+            (lambda ()
+              (clj-refactor-mode 1)
+              (yas-minor-mode 1))))
+
+(use-package docker
+  :after (general prodigy)
+  :config
+  (prodigy-define-tag
+    :name 'docker
+    :ready-message ".*Attaching to .*")
+
+  (prodigy-define-tag
+    :name 'docker-compose
+    :command "docker-compose"
+    :args '("up")))
+
+(use-package dockerfile-mode)
+
+(defun ior3k/prodigy-define-docker-compose-service (project cwd)
+  (prodigy-define-service
+    :name project
+    :cwd cwd
+    :tags '(docker docker-compose)))
+
+(defun ior3k/dockerfile-settings ()
+  (setq-local tab-width 2))
+
+(use-package coffee-mode)
+
+(use-package ruby-mode
+  :no-require t
+  :ensure nil
+  :after lsp
+  :custom
+  (ruby-defun-beg-re "\\(\\(private \\)?def\\|class\\|module\\)")
+  (ruby-deep-arglist nil)
+  :hook ((ruby-mode . lsp)))
+
+(use-package inf-ruby
+  :hook ((inf-ruby . subword-mode)))
+
+(use-package minitest
+  :custom
+  (minitest-use-rails t)
+  :hook (ruby-mode . minitest-mode))
+
+(use-package web-mode-ruby
+  :after (web-mode)
+  :ensure nil
+  :hook ((web-mode . ior3k/configure-web-pairing))
+  :mode ("\\.erb\\'" . web-mode)
+  :no-require t)
+
+(defun ior3k/after-switch-to-rails-project ()
+  (run-hooks 'ior3k/in-rails-project-hook))
+
+(defun ior3k/configure-web-pairing ()
+  (require 'smartparens-ruby)
+  (setq web-mode-enable-auto-pairing nil)
+
+  (sp-local-pair 'web-mode "<" ">")
+  (sp-local-pair 'web-mode "<%" "%>"))
+
+(defun ior3k/rails-console ()
+  (interactive)
+  (inf-ruby-console-rails (projectile-project-root)))
+
+(use-package slim-mode)
+
+(defun ior3k/inf-ruby-console-heroku (env)
+  "Run console in heroku environment."
+  (interactive (list (ior3k/read-heroku-envs)))
+  (inf-ruby-console-run (concat "heroku run rails console -r " env)
+                        (concat "heroku: " env)))
+
+(defun ior3k/read-heroku-envs ()
+  (completing-read "Heroku environment: "
+                   '("staging" "production")
+                   nil
+                   t))
+
+(use-package sql-indent
+  :hook (sql-mode . sqlind-minor-mode))
+
+(defun ior3k/configure-mysql-program ()
+  (setq sql-mysql-program (string-trim-right (shell-command-to-string "asdf which mysql"))))
+
+(use-package typescript-mode
+  :config
+  (setq typescript-indent-level 2))
+
+(use-package tide
+  :after (typescript-mode company flycheck)
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode)
+         (before-save . tide-format-before-save)))
+
+(use-package org
+  :hook (org-mode . visual-line-mode))
+
+(use-package worf
+  :after org
+  :hook (org-mode . worf-mode))
+
+(use-package general
+  :after (evil evil-collection ivy)
+  :config
+  (general-def :states '(normal motion) "SPC" nil)
+
+  (general-create-definer buffer-command-def
+    :states 'normal
+    :prefix "SPC")
+
+  (general-create-definer motion-def
+    :states '(normal motion visual))
+
+  (general-create-definer global-command-def
+    :states '(normal insert)
+    :prefix "M-SPC")
+
+  (motion-def
+    "f"   'evilem-motion-find-char
+    "F"   'evilem-motion-find-char-backward
+    "C-p" 'counsel-yank-pop)
+
+  (motion-def
+   :prefix "SPC"
+   "f" '(evil-avy-goto-char-timer :which-key "goto chars after some time")
+   "/" '(evil-search-forward :which-key "regular evil search"))
+
+  (general-define-key
+   :states '(emacs insert motion normal visual)
+
+   "M-h" 'windmove-left
+   "M-j" 'windmove-down
+   "M-k" 'windmove-up
+   "M-l" 'windmove-right)
+
+  (general-define-key
+   "C-s" '(save-buffer :which-key "save buffer"))
+
+  (general-define-key
+   :states 'normal
+
+   "+" 'universal-argument
+   "-" 'negative-argument
+   "/" 'swiper
+   "q" 'previous-buffer
+   "Q" 'delete-other-windows)
+
+  (defun ior3k-insert-semicolon-at-eol ()
+    (interactive)
+    (end-of-line)
+    (self-insert-command 1))
+
+  (defun ior3k-find-agenda-org-in-project ()
+    (interactive)
+    (find-file (expand-file-name "agenda.org" (projectile-project-root))))
+
+  (general-define-key
+   :states 'insert
+   :keymaps '(java-mode-map rjsx-mode-map reason-mode)
+   ";" 'ior3k-insert-semicolon-at-eol)
+
+  (general-define-key
+   :states '(emacs insert motion normal visual)
+   :keymaps '(completion-list-mode-map fundamental-mode-map)
+
+   "C-w" 'delete-frame)
+
+  (general-define-key
+   :states '(normal visual motion emacs)
+
+   "C-w" 'delete-frame)
+
+  (general-define-key
+   :states '(normal motion visual)
+
+   "L" 'evil-forward-arg
+   "H" 'evil-backward-arg)
+
+  (general-define-key
+   :keymaps 'evil-inner-text-objects-map
+
+   "a" 'evil-inner-arg)
+
+  (general-define-key
+   :keymaps 'evil-outer-text-objects-map
+
+   "a" 'evil-outer-arg)
+
+  (buffer-command-def
+   "v" '(er/expand-region :which-key "expand region"))
+
+  (global-command-def
+    "b"  '(:ignore t :which-key "buffer")
+    "bb" '(ivy-switch-buffer :which-key "switch buffer")
+    "bd" '(evil-delete-buffer :which-key "delete current buffer")
+    "bo" '(read-only-mode :which-key "toggle read only mode")
+    "bp" '(counsel-projectile :which-key "open in project")
+    "bs" '(save-buffer :which-key "save this buffer")
+    "bS" '(write-file :which-key "write to file"))
+
+  (global-command-def
+    "c"   '(:ignore t :which-key "code")
+    "cc"  '(projectile-compile-project :which-key "compile")
+    "cC"  '(recompile :which-key "recompile")
+    "ca"  '(lsp-execute-code-action :which-key "action")
+    "cet" '(lsp-treemacs-errors-list :which-key "show errors in tree")
+    "ch"  '(lsp-describe-thing-at-point :which-key "show symbol documentation")
+    "cr"  '(lsp-rename :which-key "rename symbol")
+    "cwr" '(lsp-workspace-restart :which-key "restart")
+    "cx"  '(:ignore t :which-key "evals"))
+
+  (global-command-def
+    "E"  '(:ignore t :which-key "editor")
+    "Ed" '(dired :which-key "dired")
+    "Ek" '(package-list-packages :which-key "packages")
+    "Ep" '(projectile-switch-project :which-key "switch")
+    "Eq" '(save-buffers-kill-emacs :which-key "quit")
+    "Es" '(prodigy :which-key "servers")
+    "Ex"  '(eval-last-sexp :which-key "eval last expression"))
+
+  (global-command-def
+    "f"  '(:ignore t :which-key "file")
+    "fa" '(find-alternate-file :which-key "reload")
+    "fd" '(delete-current-file :which-key "delete current")
+    "ff" '(counsel-find-file :which-key "find in current directory")
+    "fi" '(insert-file :which-key "insert contents")
+    "fr" '(er-rename-file-and-buffer :which-key "rename")
+    "fs" '(write-file :which-key "save as")
+    "fw" '(pwd :which-key "pwd"))
+
+  (global-command-def
+    "h"  '(:ignore t :which-key "help")
+    "hf" '(describe-function :which-key "function")
+    "hk" '(describe-key :which-key "key")
+    "hm" '(describe-mode :which-key "mode")
+    "hv" '(describe-variable :which-key "variable"))
+
+  (global-command-def
+    "m"  '(:ignore t :which-key "frame")
+    "md" '(delete-frame :which-key "delete current")
+    "mm" '(make-frame-command :which-key "new"))
+
+  (global-command-def
+    "p" '(:ignore t :which-key "project")
+    "ph" '(projectile-run-eshell :which-key "shell in project")
+    "ps" '(counsel-ack :which-key "search in project")
+    "px" '(projectile-run-async-shell-command-in-root :which-key "command in root"))
+
+  (global-command-def
+    "q"  '(:ignore t :which-key "sql")
+    "qq" '(sql-connect :which-key "connect"))
+
+  (global-command-def
+    "r" '(:ignore t :which-key "repl"))
+
+  (global-command-def
+    "v"   '(:ignore t :which-key "version control")
+    "vb"  '(magit-blame-addition :which-key "blame")
+    "vc"  '(:ignore t :which-key "conflicts")
+    "vca" '(smerge-keep-current :which-key "keep all parts")
+    "vcn" '(smerge-next :which-key "go to next conflict")
+    "vcN" '(smerge-prev :which-key "go to previous conflict")
+    "vcj" '(smerge-keep-lower :which-key "keep lower part")
+    "vck" '(smerge-keep-upper :which-key "keep upper part")
+    "vcl" '(smerge-keep-current :which-key "keep part under cursor")
+    "vlf" '(magit-log-buffer-file :which-key "commits related to file")
+    "vv"  '(projectile-vc :which-key "git status")
+    "vu"  '(:ignore t :which-key "in buffer")
+    "vun" '(git-gutter:next-hunk :which-key "next hunk")
+    "vup" '(git-gutter:previous-hunk :which-key "previous hunk")
+    "vur" '(git-gutter:revert-hunk :which-key "revert hunk")
+    "vus" '(git-gutter:stage-hunk :which-key "stage hunk"))
+
+  (global-command-def
+    "w"  '(:ignore t :which-key "window")
+    "wd" '(delete-window :which-key "delete current")
+    "wD" '(delete-other-windows :which-key "delete other windows")
+    "wj" '(split-window-below :which-key "open below")
+    "wl" '(split-window-right :which-key "open right"))
+
+  (global-command-def
+   "M-SPC" 'counsel-M-x))
+
+(use-package elisp-keybindings
+  :ensure nil
+  :no-require t
+  :config
+  (global-command-def
+   :keymaps 'emacs-lisp-mode-map
+
+   "e"   '(:ignore t :which-key "eval")
+   "eb" '(eval-buffer :which-key "buffer")
+   "ee" '(eval-last-sexp :which-key "last expression")
+   "ef" '(eval-defun :which-key "defun")))
+
+(use-package clojure-keybindings
+  :ensure nil
+  :no-require t
+  :preface
+  (defun clojure-keybindings/clojure-project-p ()
+    )
+
+  :config
+  (global-command-def
+    :predicate '(equal 'lein-test (projectile-project-type))
+
+    "e"   '(:ignore t :which-key "eval")
+    "eb"  '(cider-eval-buffer :which-key "current buffer")
+    "ef"  '(cider-eval-defun-at-point :which-key "current defun")
+    "eg"  '(cider-eval-region :which-key "region")
+    "en"  '(:ignore t :which-key "namespaces")
+    "enr" '(cider-ns-refresh :which-key "refresh")
+    "ens" '(cider-repl-set-ns :which-key "set current")
+    "er"  '(:ignore t :which-key "eval")
+    "ers" '(cider-jack-in-clj :which-key "start"))
+
+  (global-command-def
+    :keymaps 'cider-repl-mode-map
+
+    "erq" '(cider-quit :whick-key "quit")))
+
+(use-package ivy-keybindings
+  :ensure nil
+  :no-require t
+
+  :preface
+  (defun ivy-keybindings/counsel-projectile ()
+    (interactive)
+    (ivy-quit-and-run (call-interactively #'counsel-projectile)))
+
+  :config
+  (general-define-key
+   :states '(insert normal)
+   :keymaps 'ivy-switch-buffer-map
+
+   "C-p" 'ivy-keybindings/counsel-projectile)
+
+  (general-define-key
+   :states 'insert
+   :keymaps 'ivy-minibuffer-map
+
+   "C-j" 'ivy-next-line
+   "C-k" 'ivy-previous-line))
+
+(use-package prodigy-keybindings
+  :ensure nil
+  :no-require t
+  :hook (evil-collection-setup . prodigy-keybindings/setup)
+  :preface
+  (defun prodigy-keybindings/setup (&rest _ignored)
+    (general-define-key
+     :states 'normal
+     :keymaps 'prodigy-mode-map
+
+     "RET" 'prodigy-display-process)))
+
+(use-package ruby-keybindings
+  :ensure nil
+  :no-require t
+  :config
+  (general-define-key
+   :states 'normal
+   :keymaps 'minitest-compilation-mode-map
+
+    "gr" '(minitest-rerun :which-key "run last"))
+
+  (global-command-def
+    :predicate '(equal 'rails-test (projectile-project-type))
+
+    "t"  '(:ignore t :which-key "tests")
+    "tb" '(minitest-verify :which-key "run in current buffer")
+    "tf" '(minitest-verify-single :which-key "run current")
+    "tp" '(minitest-verify-all :which-key "run in project")
+    "tr" '(minitest-rerun :which-key "run last")))
 
 (use-package display-line-numbers
   :no-require t
@@ -202,18 +921,6 @@
          (emacs-lisp-mode . eldoc-mode)))
 
 (use-package emmet-mode)
-
-(use-package feature-mode
-  :config
-  (general-define-key
-   :prefix "M-SPC"
-   :keymaps 'feature-mode-map
-
-   "cta" '(feature-verify-all-scenarios-in-project
-           :whick-key "run scenarios in project")
-   "cts" '(feature-verify-scenario-at-pos :which-key "run scenario under cursor")
-   "ctt" '(feature-verify-all-scenarios-in-buffer
-           :which-key "run scenarios in buffer")))
 
 (use-package flycheck)
 
@@ -411,10 +1118,19 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(git-gutter-fr:side 'right-fringe)
+ '(git-gutter:added-sign "+")
+ '(git-gutter:deleted-sign "-")
+ '(git-gutter:update-interval 2)
+ '(helm-buffer-max-length 40)
+ '(helm-completion-style 'emacs)
  '(package-selected-packages
-   '(slim-mode edn org-mode git-gutter-fringe git-gutter tide typescript-mode helm-cider clj-refactor cider-eval-sexp-fu wgrep-helm web-mode coffee-mode sql-indent lispyville composite cider clojure-mode aggressive-indent aggressive-indent-mode alchemist helm-lsp helm-projectile helm-ls-git helm lsp-treemacs elixir-mode elixir-ls elixir-lsp flycheck-elixir reason-mode terraform-mode docker dockerfile-mode rubocop evil-mc indium flycheck yasnippet yaml-mode xterm-color which-key wgrep use-package telephone-line smartparens rjsx-mode rainbow-mode rainbow-delimiters projectile-rails prodigy prettier-js lsp-ui lsp-java json-mode highlight-indent-guides general feature-mode exec-path-from-shell evil-surround evil-matchit evil-magit evil-exchange evil-collection evil-args enh-ruby-mode emmet-mode dap-mode avy atom-one-dark-theme add-node-modules-path))
+   '(minitest worf expand-region counsel-projectile evil-snipe evil-easymotion slim-mode edn org-mode git-gutter-fringe git-gutter tide typescript-mode helm-cider clj-refactor cider-eval-sexp-fu wgrep-helm web-mode coffee-mode sql-indent lispyville composite cider clojure-mode aggressive-indent aggressive-indent-mode alchemist helm-lsp helm-projectile helm-ls-git helm lsp-treemacs elixir-mode elixir-ls elixir-lsp flycheck-elixir reason-mode terraform-mode docker dockerfile-mode rubocop evil-mc indium flycheck yasnippet yaml-mode xterm-color which-key wgrep use-package telephone-line smartparens rjsx-mode rainbow-mode rainbow-delimiters projectile-rails prodigy prettier-js lsp-ui lsp-java json-mode highlight-indent-guides general feature-mode exec-path-from-shell evil-surround evil-matchit evil-magit evil-exchange evil-collection evil-args enh-ruby-mode emmet-mode dap-mode avy atom-one-dark-theme add-node-modules-path))
  '(safe-local-variable-values
-   '((eval setq sql-mysql-program
+   '((eval ior3k/after-switch-to-rails-project)
+     (eval ior3k/configure-mysql-program)
+     (eval ior3k/switched-to-rails-project)
+     (eval setq sql-mysql-program
            (string-trim-right
             (shell-command-to-string "asdf which mysql")))
      (eval
