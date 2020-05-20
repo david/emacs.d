@@ -30,10 +30,10 @@
   :hook (after-init . telephone-line-mode))
 
 (use-package evil
-  :init
-  (setq evil-want-integration nil)
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
+  :custom
+  (evil-want-integration nil)
+  (evil-want-keybinding nil)
+  (evil-want-C-u-scroll t)
   :config
   (setq-default evil-shift-width 2)
 
