@@ -49,7 +49,8 @@
   :config
   (evil-collection-init))
 
-(use-package evil-easymotion)
+(use-package evil-easymotion
+  :defer t)
 
 (use-package evil-exchange
   :after evil
