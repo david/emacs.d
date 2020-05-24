@@ -409,14 +409,17 @@
 
 (use-package coffee-mode)
 
-(use-package ruby-mode
-  :no-require t
-  :ensure nil
-  :after lsp
-  :custom
-  (ruby-defun-beg-re "\\(\\(private \\)?def\\|class\\|module\\)")
-  (ruby-deep-arglist nil)
-  :hook ((ruby-mode . lsp)))
+(use-package enh-ruby-mode
+  :mode "\\.rb$"
+
+  :general
+  (buffer-command-def
+    :keymaps 'enh-ruby-mode-map
+
+    "e"   '(:ignore t :which-key "eval")
+    "er"  '(ruby-send-region :which-key "region"))
+
+  :hook (enh-ruby-mode . lsp))
 
 (use-package inf-ruby
   :hook ((inf-ruby . subword-mode)))
@@ -424,7 +427,31 @@
 (use-package minitest
   :custom
   (minitest-use-rails t)
-  :hook (ruby-mode . minitest-mode))
+
+  :general
+  (:keymaps 'minitest-compilation-mode-map
+   :states 'normal
+
+   "gr" '(minitest-rerun :which-key "run last"))
+
+  (buffer-command-def
+    :keymaps 'enh-ruby-mode-map
+    :predicate '(string-match-p "_test\\.rb$" (buffer-file-name))
+
+    "t"  '(:ignore t :which-key "tests")
+    "tb" '(minitest-verify :which-key "run in current buffer")
+    "tf" '(minitest-verify-single :which-key "run current")
+    "tp" '(minitest-verify-all :which-key "run in project")
+    "tr" '(minitest-rerun :which-key "run last"))
+
+  (global-command-def
+    :predicate '(equal 'rails-test (projectile-project-type))
+
+    "t"  '(:ignore t :which-key "tests")
+    "tp" '(minitest-verify-all :which-key "run in project")
+    "tr" '(minitest-rerun :which-key "run last"))
+
+  :hook (enh-ruby-mode . minitest-mode))
 
 (use-package web-mode-ruby
   :after (web-mode)
