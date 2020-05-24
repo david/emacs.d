@@ -351,26 +351,20 @@
      slurp/barf-lispy
      additional)))
 
-'(use-package clojure-keybindings
-  :after general
-  :ensure nil
-  :no-require t
-  :config
-  (global-def
-    :keymaps '(clojure-mode-map cider-repl-mode-map)
-    "cxf" '(cider-eval-defun-at-point :which-key "defun at point")
-    "cxu" '(cider-eval-buffer :which-key "buffer")
-    "cxx" '(cider-eval-last-sexp :which-key "last sexp")
-    "re"  '(:ignore t :which-key "evals")
-    "rn"  '(:ignore t :which-key "namespace")
-    "rnr" '(cider-ns-reload :which-key "reload")
-    "rns" '(cider-repl-set-ns :which-key "set repl namespace")
-    "rq"  '(cider-quit :which-key "quit")
-    "rs"  '(cider-jack-in-clj :which-key "start")))
-
 (use-package edn)
 
 (use-package clojure-mode
+  :general
+  (buffer-command-def
+    :keymaps 'clojure-mode-map
+
+    "e"   '(:ignore t :which-key "eval")
+    "ee"  '(cider-eval-last-sexp :which-key "last sexp")
+    "ef"  '(cider-eval-defun-at-point :which-key "defun at point")
+    "ei"  '(:ignore t :which-key "inspect")
+    "eir" '(cider-inspect-last-result :which-key "last result")
+    "er"  '(cider-eval-region :which-key "region"))
+
   :config
   (put-clojure-indent 'match 1))
 
@@ -670,32 +664,6 @@
    "eb" '(eval-buffer :which-key "buffer")
    "ee" '(eval-last-sexp :which-key "last expression")
    "ef" '(eval-defun :which-key "defun")))
-
-(use-package clojure-keybindings
-  :ensure nil
-  :no-require t
-  :preface
-  (defun clojure-keybindings/clojure-project-p ()
-    )
-
-  :config
-  (global-command-def
-    :predicate '(equal 'lein-test (projectile-project-type))
-
-    "e"   '(:ignore t :which-key "eval")
-    "eb"  '(cider-eval-buffer :which-key "current buffer")
-    "ef"  '(cider-eval-defun-at-point :which-key "current defun")
-    "eg"  '(cider-eval-region :which-key "region")
-    "en"  '(:ignore t :which-key "namespaces")
-    "enr" '(cider-ns-refresh :which-key "refresh")
-    "ens" '(cider-repl-set-ns :which-key "set current")
-    "er"  '(:ignore t :which-key "eval")
-    "ers" '(cider-jack-in-clj :which-key "start"))
-
-  (global-command-def
-    :keymaps 'cider-repl-mode-map
-
-    "erq" '(cider-quit :whick-key "quit")))
 
 (use-package ivy-keybindings
   :ensure nil
