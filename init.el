@@ -76,8 +76,10 @@
   :hook (after-init . global-evil-matchit-mode))
 
 (use-package evil-mc
-  :config
-  (global-evil-mc-mode 1))
+  :general
+  (:states 'normal
+   "C-n" 'evil-mc-make-and-goto-next-match)
+  :hook (after-init . global-evil-mc-mode))
 
 (use-package evil-surround
   :config
