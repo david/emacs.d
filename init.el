@@ -82,8 +82,7 @@
   :hook (after-init . global-evil-mc-mode))
 
 (use-package evil-surround
-  :config
-  (global-evil-surround-mode 1))
+  :hook (after-init . global-evil-surround-mode))
 
 (use-package ivy
   :custom
