@@ -49,6 +49,21 @@
   :config
   (evil-collection-init))
 
+(use-package general
+  :config
+  (general-def :states '(normal motion) "SPC" nil)
+
+  (general-create-definer buffer-command-def
+    :states 'normal
+    :prefix "SPC")
+
+  (general-create-definer motion-def
+    :states '(normal motion visual))
+
+  (general-create-definer global-command-def
+    :states '(normal insert)
+    :prefix "M-SPC"))
+
 (use-package evil-easymotion
   :defer t)
 
@@ -478,19 +493,6 @@
 (use-package general
   :after (evil evil-collection ivy)
   :config
-  (general-def :states '(normal motion) "SPC" nil)
-
-  (general-create-definer buffer-command-def
-    :states 'normal
-    :prefix "SPC")
-
-  (general-create-definer motion-def
-    :states '(normal motion visual))
-
-  (general-create-definer global-command-def
-    :states '(normal insert)
-    :prefix "M-SPC")
-
   (motion-def
     "f"   'evilem-motion-find-char
     "F"   'evilem-motion-find-char-backward
