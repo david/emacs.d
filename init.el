@@ -371,12 +371,10 @@
   (put-clojure-indent 'match 1))
 
 (use-package cider
-  :after (general)
-  :config
-  (add-hook 'clojure-mode-hook 'cider-mode))
+  :hook (clojure-mode . cider-mode))
 
 (use-package cider-eval-sexp-fu
-  :after (cider))
+  :after cider)
 
 (use-package clj-refactor
   :after (cider clojure-mode yas)
