@@ -582,6 +582,7 @@
    "+" 'universal-argument
    "-" 'negative-argument
    "/" 'swiper
+   "?" 'swiper
    "q" 'previous-buffer
    "Q" 'delete-other-windows)
 
