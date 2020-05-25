@@ -203,13 +203,13 @@
 
 (use-package magit
   :after general
-  :commands (magit-status)
-  :config
-  (setq magit-commit-show-diff nil)
-  (setq magit-log-arguments '("-n128" "--decorate"))
-  (setq magit-rebase-arguments '("--autostash"))
-  (setq magit-branch-arguments nil)
-  (setq magit-commit-show-diff nil))
+  :commands magit-status
+  :custom
+  (magit-commit-show-diff nil)
+  (magit-log-arguments '("-n128" "--decorate"))
+  (magit-rebase-arguments '("--autostash"))
+  (magit-branch-arguments nil)
+  (magit-commit-show-diff nil))
 
 (use-package evil-magit
   :after (evil general magit)
