@@ -96,6 +96,13 @@
 
   (ivy-mode 1))
 
+(use-package counsel
+  :general
+  (general-define-key
+   :keymaps 'counsel-find-file-map
+
+   "C-l" 'counsel-up-directory))
+
 (use-package window-management
   :ensure nil
   :no-require t
