@@ -64,6 +64,18 @@
     :states '(normal insert)
     :prefix "M-SPC"))
 
+(use-package emacs-meta-keybindings
+  :no-require t
+  :ensure nil
+  :preface
+  (defun emk/open-init-el ()
+    (interactive)
+    (find-file (expand-file-name "~/.emacs.d/init.el")))
+  :general
+  (global-command-def
+    "E"  '(:ignore true :which-key "editor")
+    "Ec" '(emk/open-init-el :which-key "open init.el")))
+
 (use-package evil-easymotion
   :defer t)
 
