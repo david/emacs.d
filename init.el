@@ -50,7 +50,7 @@
   (evil-collection-init))
 
 (use-package general
-  :config
+  :preface
   (general-def :states '(normal motion) "SPC" nil)
 
   (general-create-definer buffer-command-def
