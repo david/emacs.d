@@ -529,6 +529,29 @@
   :after org
   :hook (org-mode . worf-mode))
 
+(use-package vc-keybindings
+  :after general
+  :ensure nil
+  :no-require t
+  :general
+  (global-command-def
+    "v"   '(:ignore t :which-key "version control")
+    "vb"  '(magit-blame-addition :which-key "blame")
+    "vc"  '(:ignore t :which-key "conflicts")
+    "vca" '(smerge-keep-current :which-key "keep all parts")
+    "vcn" '(smerge-next :which-key "go to next conflict")
+    "vcN" '(smerge-prev :which-key "go to previous conflict")
+    "vcj" '(smerge-keep-lower :which-key "keep lower part")
+    "vck" '(smerge-keep-upper :which-key "keep upper part")
+    "vcl" '(smerge-keep-current :which-key "keep part under cursor")
+    "vh"  '(:ignore t :which-key "hunks")
+    "vhn" '(git-gutter:next-hunk :which-key "next hunk")
+    "vhp" '(git-gutter:previous-hunk :which-key "previous hunk")
+    "vhr" '(git-gutter:revert-hunk :which-key "revert hunk")
+    "vhs" '(git-gutter:stage-hunk :which-key "stage hunk")
+    "vlf" '(magit-log-buffer-file :which-key "commits related to file")
+    "vv"  '(projectile-vc :which-key "git status")))
+
 (use-package general
   :after (evil evil-collection ivy)
   :config
@@ -669,24 +692,6 @@
 
   (global-command-def
     "r" '(:ignore t :which-key "repl"))
-
-  (global-command-def
-    "v"   '(:ignore t :which-key "version control")
-    "vb"  '(magit-blame-addition :which-key "blame")
-    "vc"  '(:ignore t :which-key "conflicts")
-    "vca" '(smerge-keep-current :which-key "keep all parts")
-    "vcn" '(smerge-next :which-key "go to next conflict")
-    "vcN" '(smerge-prev :which-key "go to previous conflict")
-    "vcj" '(smerge-keep-lower :which-key "keep lower part")
-    "vck" '(smerge-keep-upper :which-key "keep upper part")
-    "vcl" '(smerge-keep-current :which-key "keep part under cursor")
-    "vlf" '(magit-log-buffer-file :which-key "commits related to file")
-    "vv"  '(projectile-vc :which-key "git status")
-    "vu"  '(:ignore t :which-key "in buffer")
-    "vun" '(git-gutter:next-hunk :which-key "next hunk")
-    "vup" '(git-gutter:previous-hunk :which-key "previous hunk")
-    "vur" '(git-gutter:revert-hunk :which-key "revert hunk")
-    "vus" '(git-gutter:stage-hunk :which-key "stage hunk"))
 
   (global-command-def
     "w"  '(:ignore t :which-key "window")
