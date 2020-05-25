@@ -57,12 +57,15 @@
     :states 'normal
     :prefix "SPC")
 
+  (general-create-definer global-command-def
+    :states '(normal insert)
+    :prefix "M-SPC")
+
   (general-create-definer motion-def
     :states '(normal motion visual))
 
-  (general-create-definer global-command-def
-    :states '(normal insert)
-    :prefix "M-SPC"))
+  (general-create-definer normal-def
+    :states 'normal))
 
 (use-package emacs-meta-keybindings
   :no-require t
@@ -89,7 +92,7 @@
 
 (use-package evil-mc
   :general
-  (:states 'normal
+  (normal-def
    "C-n" 'evil-mc-make-and-goto-next-match)
   :hook (after-init . global-evil-mc-mode))
 
