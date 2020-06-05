@@ -248,6 +248,14 @@
   (magit-branch-arguments nil)
   (magit-commit-show-diff nil))
 
+(use-package forge
+  :after magit
+  :custom
+  (forge-topic-list-limit '(60 . -1)))
+
+(use-package github-review
+  :after forge)
+
 (use-package evil-magit
   :after (evil general magit)
   :config
