@@ -280,17 +280,18 @@
   (auto-fill-mode 1))
 
 (use-package projectile
-  :after (ivy)
-  :config
-  (setq projectile-completion-system 'ivy)
+  :after ivy
+  :custom
+  (projectile-completion-system 'ivy)
 
+  :config
   (projectile-mode 1))
 
 (use-package counsel-projectile
   :commands (counsel-projectile))
 
 (use-package prodigy
-  :after (general)
+  :after general
   :config
   (prodigy-define-tag
     :name 'postgres
