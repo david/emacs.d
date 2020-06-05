@@ -134,6 +134,7 @@
   :hook (after-init . global-evil-surround-mode))
 
 (use-package ivy
+  :demand t
   :custom
   (ivy-count-format "")
   (ivy-height 20)
