@@ -83,7 +83,38 @@
     "Ec" '(emk/open-init-el :which-key "open init.el")))
 
 (use-package evil-easymotion
-  :defer t)
+  :defer t
+
+  :general
+  (motion-def
+    "f"   'evilem-motion-find-char-in-line
+    "F"   'evilem-motion-find-char-in-line-backward
+    "t"   'evilem-motion-find-char-to-in-line
+    "T"   'evilem-motion-find-char-to-in-line-backward)
+  :config
+  (evilem-make-motion
+   evilem-motion-find-char-in-line #'evil-repeat-find-char
+   :pre-hook (save-excursion
+               (setq evil-this-type 'inclusive)
+               (call-interactively #'evil-find-char)))
+
+  (evilem-make-motion
+   evilem-motion-find-char-in-line-backward #'evil-repeat-find-char
+   :pre-hook (save-excursion
+               (setq evil-this-type 'inclusive)
+               (call-interactively #'evil-find-char-backward)))
+
+  (evilem-make-motion
+   evilem-motion-find-char-to-in-line #'evil-repeat-find-char
+   :pre-hook (save-excursion
+               (setq evil-this-type 'inclusive)
+               (call-interactively #'evil-find-char-to)))
+
+  (evilem-make-motion
+   evilem-motion-find-char-to-in-line-backward #'evil-repeat-find-char
+   :pre-hook (save-excursion
+               (setq evil-this-type 'inclusive)
+               (call-interactively #'evil-find-char-to-backward))))
 
 (use-package evil-exchange
   :after evil
@@ -562,8 +593,6 @@
   :after (evil evil-collection ivy)
   :config
   (motion-def
-    "f"   'evilem-motion-find-char
-    "F"   'evilem-motion-find-char-backward
     "C-p" 'counsel-yank-pop)
 
   (motion-def
