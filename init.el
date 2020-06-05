@@ -146,6 +146,7 @@
   (ivy-mode 1))
 
 (use-package counsel
+  :after ivy
   :general
   (general-define-key
    :keymaps 'counsel-find-file-map
