@@ -239,7 +239,8 @@
 
 (use-package magit
   :after general
-  :commands magit-status
+  :commands (magit-status magit-log-current)
+
   :custom
   (magit-commit-show-diff nil)
   (magit-log-arguments '("-n128" "--decorate"))
