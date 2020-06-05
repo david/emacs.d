@@ -66,7 +66,10 @@
     :states '(normal motion visual))
 
   (general-create-definer normal-def
-    :states 'normal))
+    :states 'normal)
+
+  (global-command-def
+    "E" '(:ignore t :which-key "editor")))
 
 (use-package emacs-meta-keybindings
   :no-require t
@@ -77,7 +80,6 @@
     (find-file (expand-file-name "~/.emacs.d/init.el")))
   :general
   (global-command-def
-    "E"  '(:ignore true :which-key "editor")
     "Ec" '(emk/open-init-el :which-key "open init.el")))
 
 (use-package evil-easymotion
