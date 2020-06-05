@@ -292,6 +292,11 @@
 
 (use-package prodigy
   :after general
+
+  :general
+  (global-command-def
+    "Es" '(prodigy :which-key "servers"))
+
   :config
   (prodigy-define-tag
     :name 'postgres
@@ -467,18 +472,36 @@
 (use-package coffee-mode)
 
 (use-package enh-ruby-mode
-  :mode "\\.rb$"
+  :mode ("\\.rb\\'" "\\.rake\\'")
+
+  :custom
+  (enh-ruby-deep-indent-construct nil)
 
   :general
   (buffer-command-def
     :keymaps 'enh-ruby-mode-map
 
-    "e"   '(:ignore t :which-key "eval")
-    "er"  '(ruby-send-region :which-key "region"))
+    "e"  '(:ignore t :which-key "eval")
+    "eb" '(ruby-send-buffer :which-key "buffer")
+    "ef" '(ruby-send-definition :which-key "defun")
+    "eF" '(ruby-send-definition-and-go :which-key "defun")
+    "ek" '(ruby-send-block :which-key "block")
+    "el" '(ruby-send-line :whick-key "line")
+    "er" '(ruby-send-region :which-key "region"))
 
   :hook (enh-ruby-mode . lsp))
 
 (use-package inf-ruby
+  :preface
+  (defun inf-ruby/console (command console-buffer-name)
+    (if (bufferp (get-buffer console-buffer-name))
+        (switch-to-buffer console-buffer-name)
+      (inf-ruby-console-run command console-buffer-name)))
+
+  (defun inf-ruby/dev-console ()
+    (interactive)
+    (inf-ruby/console "rails console -e development" "console: development"))
+
   :hook ((inf-ruby . subword-mode)))
 
 (use-package minitest
@@ -557,7 +580,7 @@
   :ensure nil
   :no-require t
   :general
-  (global-command-def
+  (buffer-command-def
     "v"   '(:ignore t :which-key "version control")
     "vb"  '(magit-blame-addition :which-key "blame")
     "vc"  '(:ignore t :which-key "conflicts")
@@ -572,7 +595,12 @@
     "vhp" '(git-gutter:previous-hunk :which-key "previous hunk")
     "vhr" '(git-gutter:revert-hunk :which-key "revert hunk")
     "vhs" '(git-gutter:stage-hunk :which-key "stage hunk")
-    "vlf" '(magit-log-buffer-file :which-key "commits related to file")
+    "vl"  '(:ignore t :which-key "log")
+    "vlb" '(magit-log-buffer-file :which-key "file")
+    "vlr" '(vc-region-history :which-key "region"))
+
+  (global-command-def
+    "v"   '(:ignore t :which-key "version control")
     "vv"  '(projectile-vc :which-key "git status")))
 
 (use-package general
@@ -603,7 +631,6 @@
    "+" 'universal-argument
    "-" 'negative-argument
    "/" 'swiper
-   "?" 'swiper
    "q" 'previous-buffer
    "Q" 'delete-other-windows)
 
@@ -618,7 +645,7 @@
 
   (general-define-key
    :states 'insert
-   :keymaps '(java-mode-map rjsx-mode-map reason-mode)
+   :keymaps '(rjsx-mode-map reason-mode)
    ";" 'ior3k-insert-semicolon-at-eol)
 
   (general-define-key
@@ -648,15 +675,13 @@
 
    "a" 'evil-outer-arg)
 
-  (buffer-command-def
-   "v" '(er/expand-region :which-key "expand region"))
-
   (global-command-def
     "b"  '(:ignore t :which-key "buffer")
     "bb" '(ivy-switch-buffer :which-key "switch buffer")
     "bd" '(evil-delete-buffer :which-key "delete current buffer")
     "bo" '(read-only-mode :which-key "toggle read only mode")
     "bp" '(counsel-projectile :which-key "open in project")
+    "br" '(read-only-mode :which-key "toggle read only")
     "bs" '(save-buffer :which-key "save this buffer")
     "bS" '(write-file :which-key "write to file"))
 
@@ -728,11 +753,11 @@
 (use-package elisp-keybindings
   :ensure nil
   :no-require t
-  :config
-  (global-command-def
+  :general
+  (buffer-command-def
    :keymaps 'emacs-lisp-mode-map
 
-   "e"   '(:ignore t :which-key "eval")
+   "e"  '(:ignore t :which-key "eval")
    "eb" '(eval-buffer :which-key "buffer")
    "ee" '(eval-last-sexp :which-key "last expression")
    "ef" '(eval-defun :which-key "defun")))
@@ -1119,14 +1144,23 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(evil-collection-setup-minibuffer t)
+ '(evil-want-C-u-scroll t)
+ '(evil-want-integration nil)
+ '(evil-want-keybinding nil)
  '(git-gutter-fr:side 'right-fringe)
  '(git-gutter:added-sign "+")
  '(git-gutter:deleted-sign "-")
  '(git-gutter:update-interval 2)
  '(helm-buffer-max-length 40)
  '(helm-completion-style 'emacs)
+ '(ivy-count-format "")
+ '(ivy-height 20)
+ '(ivy-initial-inputs-alist nil)
+ '(ivy-re-builders-alist '((t . ivy--regex-ignore-order)) t)
+ '(minitest-use-rails t t)
  '(package-selected-packages
-   '(minitest worf expand-region counsel-projectile evil-snipe evil-easymotion slim-mode edn org-mode git-gutter-fringe git-gutter tide typescript-mode helm-cider clj-refactor cider-eval-sexp-fu wgrep-helm web-mode coffee-mode sql-indent lispyville composite cider clojure-mode aggressive-indent aggressive-indent-mode alchemist helm-lsp helm-projectile helm-ls-git helm lsp-treemacs elixir-mode elixir-ls elixir-lsp flycheck-elixir reason-mode terraform-mode docker dockerfile-mode rubocop evil-mc indium flycheck yasnippet yaml-mode xterm-color which-key wgrep use-package telephone-line smartparens rjsx-mode rainbow-mode rainbow-delimiters projectile-rails prodigy prettier-js lsp-ui lsp-java json-mode highlight-indent-guides general feature-mode exec-path-from-shell evil-surround evil-matchit evil-magit evil-exchange evil-collection evil-args enh-ruby-mode emmet-mode dap-mode avy atom-one-dark-theme add-node-modules-path))
+   '(git-blame github-review forge minitest worf expand-region counsel-projectile evil-snipe evil-easymotion slim-mode edn org-mode git-gutter-fringe git-gutter tide typescript-mode helm-cider clj-refactor cider-eval-sexp-fu wgrep-helm web-mode coffee-mode sql-indent lispyville composite cider clojure-mode aggressive-indent aggressive-indent-mode alchemist helm-lsp helm-projectile helm-ls-git helm lsp-treemacs elixir-mode elixir-ls elixir-lsp flycheck-elixir reason-mode terraform-mode docker dockerfile-mode rubocop evil-mc indium flycheck yasnippet yaml-mode xterm-color which-key wgrep use-package telephone-line smartparens rjsx-mode rainbow-mode rainbow-delimiters projectile-rails prodigy prettier-js lsp-ui lsp-java json-mode highlight-indent-guides general feature-mode exec-path-from-shell evil-surround evil-matchit evil-magit evil-exchange evil-collection evil-args enh-ruby-mode emmet-mode dap-mode avy atom-one-dark-theme add-node-modules-path))
  '(safe-local-variable-values
    '((eval ior3k/after-switch-to-rails-project)
      (eval ior3k/configure-mysql-program)
@@ -1139,7 +1173,16 @@
             (string-trim-right
              (shell-command-to-string "asdf which mysql"))))
      (cider-shadow-default-options . ":app")
-     (cider-default-cljs-repl . shadow))))
+     (cider-default-cljs-repl . shadow)))
+ '(telephone-line-evil-use-short-tag t)
+ '(telephone-line-lhs
+   '((evil telephone-line-airline-position-segment)
+     (accent telephone-line-projectile-segment)
+     (nil telephone-line-buffer-modified-segment telephone-line-process-segment telephone-line-buffer-name-segment)))
+ '(telephone-line-rhs
+   '((nil telephone-line-flycheck-segment)
+     (accent telephone-line-simple-major-mode-segment)
+     (evil telephone-line-evil-tag-segment))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
