@@ -451,17 +451,7 @@
               (clj-refactor-mode 1)
               (yas-minor-mode 1))))
 
-(use-package docker
-  :after (general prodigy)
-  :config
-  (prodigy-define-tag
-    :name 'docker
-    :ready-message ".*Attaching to .*")
-
-  (prodigy-define-tag
-    :name 'docker-compose
-    :command "docker-compose"
-    :args '("up")))
+(use-package docker)
 
 (use-package dockerfile-mode)
 
@@ -537,23 +527,7 @@
   (sp-local-pair 'web-mode "<" ">")
   (sp-local-pair 'web-mode "<%" "%>"))
 
-(defun ior3k/rails-console ()
-  (interactive)
-  (inf-ruby-console-rails (projectile-project-root)))
-
 (use-package slim-mode)
-
-(defun ior3k/inf-ruby-console-heroku (env)
-  "Run console in heroku environment."
-  (interactive (list (ior3k/read-heroku-envs)))
-  (inf-ruby-console-run (concat "heroku run rails console -r " env)
-                        (concat "heroku: " env)))
-
-(defun ior3k/read-heroku-envs ()
-  (completing-read "Heroku environment: "
-                   '("staging" "production")
-                   nil
-                   t))
 
 (use-package sql-indent
   :hook (sql-mode . sqlind-minor-mode))
@@ -1004,31 +978,6 @@
   :config
   (setq indium-chrome-executable "/usr/bin/google-chrome"))
 
-(use-package java-mode
-  :no-require t
-  :ensure nil
-  :after general
-  :init
-  (general-define-key
-   :states 'insert
-   :keymaps '(java-mode-map)
-   ";" 'ior3k-insert-semicolon-at-eol)
-
-  (defun ior3k-java-settings ()
-    (setq c-basic-offset 4
-          fill-column 100
-          tab-width 4
-          evil-shift-width 4)
-
-    (c-set-offset 'statement-cont '+)
-    (c-set-offset 'arglist-intro '+)
-    (c-set-offset 'arglist-close 0))
-
-  (add-hook 'java-mode-hook 'smartparens-mode)
-  (add-hook 'java-mode-hook 'subword-mode)
-  (add-hook 'java-mode-hook 'ior3k-java-settings)
-  (add-hook 'java-mode-hook 'auto-revert-mode))
-
 (use-package js2-mode
   :commands js2-mode
   :bind
@@ -1039,16 +988,6 @@
   (setq js2-mode-show-parse-errors nil)
   (setq js2-mode-show-strict-warnings nil)
   (setq js2-bounce-indent-p t))
-
-(use-package lsp-java
-  :after lsp
-  :config
-  (setq lsp-java-organize-imports nil)
-  (setq lsp-java-save-action-organize-imports nil)
-
-  (add-hook 'java-mode-hook 'lsp)
-  (add-hook 'java-mode-hook 'flycheck-mode))
-                                        ;(add-hook 'java-mode-hook 'lsp-ui-mode))
 
 (use-package prettier-js
   :after (js2-mode rjsx-mode)
@@ -1104,8 +1043,6 @@
    "C-h" 'sp-forward-barf-sexp)
 
   (show-smartparens-global-mode 1))
-
-(use-package terraform-mode)
 
 (use-package uniquify
   :ensure nil
