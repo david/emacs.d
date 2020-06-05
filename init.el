@@ -31,6 +31,7 @@
 
 (use-package evil
   :custom
+  (evil-search-module 'evil-search)
   (evil-want-integration nil)
   (evil-want-keybinding nil)
   (evil-want-C-u-scroll t)
